@@ -1,0 +1,2 @@
+fix:
+	./vendor/bin/pint
