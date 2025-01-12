@@ -122,6 +122,10 @@ class Permission
 
     const TASK_COMMENT_NOTIFY_OWN = 59;
 
+    const PROJECT_USER_PERMISSION_VIEW_OWN = 60;
+
+    const PROJECT_USER_PERMISSION_EDIT = 61;
+
     private static array $names = [
         self::USER_VIEW => 'View Users',
         self::USER_VIEW_OWN => 'View Own User',
@@ -182,6 +186,8 @@ class Permission
         self::PROJECT_NOTIFY_OWN => 'Get Own Project Notifications',
         self::TASK_NOTIFY_OWN => 'Get Own Task Notifications',
         self::TASK_COMMENT_NOTIFY_OWN => 'Get Own Task Comment Notifications',
+        self::PROJECT_USER_PERMISSION_VIEW_OWN => 'View User Project Permissions',
+        self::PROJECT_USER_PERMISSION_EDIT => 'Edit User Project Permission',
     ];
 
     public static function getName(int $permission): string
@@ -223,7 +229,6 @@ class Permission
             self::TASK_DELETE_OWN,
             self::TASK_USER_ASSIGN,
             self::TASK_NOTIFY_OWN,
-            self::TASK_COMMENT_VIEW,
             self::TASK_COMMENT_VIEW_OWN,
             self::TASK_COMMENT_ADD,
             self::TASK_COMMENT_EDIT_OWN,
@@ -243,6 +248,8 @@ class Permission
             self::TASK_STATUS_SET_OTHER,
             self::ACTIVITY_VIEW,
             self::ACTIVITY_VIEW_OWN,
+            self::PROJECT_USER_PERMISSION_VIEW_OWN,
+            self::PROJECT_USER_PERMISSION_EDIT,
         ];
     }
 
@@ -257,7 +264,6 @@ class Permission
             self::TASK_VIEW,
             self::TASK_VIEW_OWN,
             self::TASK_NOTIFY_OWN,
-            self::TASK_COMMENT_VIEW,
             self::TASK_COMMENT_VIEW_OWN,
             self::TASK_COMMENT_ADD,
             self::TASK_COMMENT_EDIT_OWN,

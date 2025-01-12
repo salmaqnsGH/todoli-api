@@ -30,6 +30,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property Carbon $updated_at
  * @property Carbon|null $deleted_at
  * @property-read Organization $organization
+ * @property-read Project[] $project_permissions
  * @property-read Project[] $owned_projects
  * @property-read Project[] $team_member_projects
  * @property-read TaskComment[] $task_comments
@@ -81,6 +82,11 @@ class User extends Authenticatable
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class);
+    }
+
+    public function project_permissions(): HasMany
+    {
+        return $this->hasMany(ProjectPermission::class);
     }
 
     public function owned_projects(): BelongsToMany

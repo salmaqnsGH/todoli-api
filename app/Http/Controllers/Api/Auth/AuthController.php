@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Constants\UserRole;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Auth\ForgotAccountRequest;
 use App\Http\Requests\Api\Auth\LoginRequest;
 use App\Http\Requests\Api\Auth\RegisterRequest;
+use App\Services\Api\Auth\ForgotAccountService;
 use App\Services\Api\Auth\LoginService;
 use App\Services\Api\Auth\LogoutService;
 use App\Services\Api\Auth\RegisterService;
@@ -19,6 +21,7 @@ class AuthController extends Controller
         protected RegisterService $registerService,
         protected LoginService $loginService,
         protected LogoutService $logoutService,
+        protected ForgotAccountService $forgotAccountService,
         protected UserService $userService,
     ) {}
 
@@ -75,5 +78,14 @@ class AuthController extends Controller
         $this->logoutService->pruneUserExpiredTokens($request);
 
         return jsonresSuccess($request, 'Success sign out');
+    }
+
+    public function forgotAccount(ForgotAccountRequest $request)
+    {
+        // TODO implement this
+        $result = $this->forgotAccountService->findByEmail($request);
+        $result = $this->forgotAccountService->sendEmailForUpdatePassword();
+
+        return jsonresSuccess($request, 'OK', []);
     }
 }
