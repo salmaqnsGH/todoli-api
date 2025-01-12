@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Constants\ProjectRoleType;
+use App\Traits\HasActivity;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -28,7 +29,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Project extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasActivity;
 
     /**
      * The attributes that are mass assignable.

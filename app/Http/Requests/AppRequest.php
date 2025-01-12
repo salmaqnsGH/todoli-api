@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Api\Task;
+namespace App\Http\Requests;
 
 use App\Http\Requests\Api\BaseRequest;
-use Illuminate\Validation\Rule;
 
-class UpdateTaskStatusRequest extends BaseRequest
+class AppRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,14 +21,6 @@ class UpdateTaskStatusRequest extends BaseRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => [
-                'sometimes',
-                'string',
-                'max:255',
-                Rule::unique('task_statuses', 'name')->ignore($this->getId())
-            ],
-            'color' => 'sometimes|string|max:255',
-        ];
+        return [];
     }
 }

@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -56,6 +57,11 @@ class Handler extends ExceptionHandler
         // Handle Route Not Found due to unauthorized access
         if ($e instanceof RouteNotFoundException) {
             return jsonresUnauthorized($request, 'Unauthorized user is not allowed here');
+        }
+
+        // Handle Record Not Found due to unmatch data model input
+        if ($e instanceof ModelNotFoundException) {
+            return jsonresNotFound($request, 'Record not found');
         }
 
         // For all other exceptions, return 500 server error

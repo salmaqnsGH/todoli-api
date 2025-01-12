@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Traits\HasActivity;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -23,7 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class TaskComment extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -40,5 +42,10 @@ class TaskComment extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function activities(): MorphMany
+    {
+        return $this->morphMany(Activity::class, 'model');
     }
 }

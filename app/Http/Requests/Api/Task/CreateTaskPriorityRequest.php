@@ -22,7 +22,7 @@ class CreateTaskPriorityRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|unique:task_priorities,name|max:255',
             'color' => 'required|string|max:255',
         ];
     }

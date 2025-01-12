@@ -14,4 +14,9 @@ abstract class BaseRequest extends FormRequest
 
         throw new HttpResponseException($response);
     }
+
+    public function getId()
+    {
+        return $this->route('id');
+    }
 }

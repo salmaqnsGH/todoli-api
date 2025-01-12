@@ -24,6 +24,7 @@ class GetPaginatedListRequest extends BaseRequest
             'filters' => 'sometimes|string|max:255',
             'page' => 'sometimes|integer',
             'per_page' => 'sometimes|integer',
+            'sort_direction' => 'sometimes|string|in:asc,desc',
         ];
     }
 }

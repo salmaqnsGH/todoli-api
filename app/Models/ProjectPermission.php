@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Traits\HasActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Models\Permission;
 
@@ -20,10 +22,11 @@ use Spatie\Permission\Models\Permission;
  * @property-read Project $project
  * @property-read User $user
  * @property-read Permission $permission
+ * @property-read Activity[] $activities
  */
 class ProjectPermission extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -45,5 +48,10 @@ class ProjectPermission extends Model
     public function permission(): BelongsTo
     {
         return $this->belongsTo(Permission::class);
+    }
+
+    public function activities(): MorphMany
+    {
+        return $this->morphMany(Activity::class, 'model');
     }
 }

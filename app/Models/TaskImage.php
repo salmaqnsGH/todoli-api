@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Traits\HasActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -16,10 +18,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Carbon $updated_at
  * @property Carbon|null $deleted_at
  * @property-read Task $task
+ * @property-read Activity[] $activities
  */
 class TaskImage extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -31,5 +34,10 @@ class TaskImage extends Model
     public function task(): BelongsTo
     {
         return $this->belongsTo(Task::class);
+    }
+
+    public function activities(): MorphMany
+    {
+        return $this->morphMany(Activity::class, 'model');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\Task;
 
 use App\Http\Requests\Api\BaseRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateTaskPriorityRequest extends BaseRequest
 {
@@ -22,7 +23,12 @@ class UpdateTaskPriorityRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|string|max:255',
+            'name' => [
+                'sometimes',
+                'string',
+                'max:255',
+                Rule::unique('task_priorities', 'name')->ignore($this->getId())
+            ],
             'color' => 'sometimes|string|max:255',
         ];
     }
