@@ -40,7 +40,7 @@ class TaskPriorityController extends Controller
     {
         $result = $this->taskPriorityService->update($request);
 
-        return jsonresSuccess($request, 'Success create data', $result);
+        return jsonresSuccess($request, 'Success update data', $result);
     }
 
     public function softDelete(AppRequest $request)

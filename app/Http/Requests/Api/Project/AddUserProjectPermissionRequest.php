@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\Project;
 
 use App\Http\Requests\Api\BaseRequest;
 
-class UpdateProjectRequest extends BaseRequest
+class AddUserProjectPermissionRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,9 @@ class UpdateProjectRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|string|max:255',
-            'description' => 'nullable|string|max:255',
-            'user_ids' => 'sometimes|array',
-            'user_ids.*' => 'exists:users,id|distinct',
+            'project_id' => 'required|integer|exists:projects,id',
+            'user_id' => 'required|integer|exists:users,id',
+            'permission_id' => 'required|integer|exists:permissions,id',
         ];
     }
 }

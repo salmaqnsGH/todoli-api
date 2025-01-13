@@ -19,4 +19,19 @@ abstract class BaseRequest extends FormRequest
     {
         return $this->route('id');
     }
+
+    public function getProjectUserId()
+    {
+        return $this->route('userId');
+    }
+
+    public function getTaskId()
+    {
+        return $this->route('taskId');
+    }
+
+    public function getTaskCommentId()
+    {
+        return $this->route('commentId');
+    }
 }

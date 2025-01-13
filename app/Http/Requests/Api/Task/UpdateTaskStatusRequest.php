@@ -27,7 +27,7 @@ class UpdateTaskStatusRequest extends BaseRequest
                 'sometimes',
                 'string',
                 'max:255',
-                Rule::unique('task_statuses', 'name')->ignore($this->getId())
+                Rule::unique('task_statuses', 'name')->ignore($this->getId()),
             ],
             'color' => 'sometimes|string|max:255',
         ];

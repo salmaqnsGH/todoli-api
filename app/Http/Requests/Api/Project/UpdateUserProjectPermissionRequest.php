@@ -22,7 +22,8 @@ class UpdateUserProjectPermissionRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'permissions' => 'sometimes|array',
+            'permission_ids' => 'sometimes|array',
+            'permission_ids.*' => 'exists:permissions,id|distinct',
         ];
     }
 }

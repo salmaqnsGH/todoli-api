@@ -4,7 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Constants\ProjectRoleType;
+use App\Constants\UserRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -92,15 +92,15 @@ class User extends Authenticatable
     public function owned_projects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class, 'project_members')
-            ->withPivot('role_type')
-            ->wherePivot('role_type', ProjectRoleType::OWNER);
+            ->withPivot('role_id')
+            ->wherePivot('role_id', UserRole::USER_OWNER);
     }
 
     public function team_member_projects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class, 'project_members')
-            ->withPivot('role_type')
-            ->wherePivot('role_type', ProjectRoleType::TEAM_MEMBER);
+            ->withPivot('role_id')
+            ->wherePivot('role_id', UserRole::USER_MEMBER);
     }
 
     public function task_comments(): HasMany

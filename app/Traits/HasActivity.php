@@ -3,10 +3,13 @@
 namespace App\Traits;
 
 use App\Constants\ActivityAction;
+use App\Mail\Activity\ActivityLogMail;
 use App\Models\Activity;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
-// TODO send notification email
 trait HasActivity
 {
     protected static function bootHasActivity()
@@ -17,16 +20,12 @@ trait HasActivity
                 ->mapWithKeys(function ($value, $field) {
                     return [$field => [
                         'old' => null,
-                        'new' => $value
+                        'new' => $value,
                     ]];
                 })
                 ->toArray();
 
-            $model->activities()->create([
-                'user_id' => Auth::id(),
-                'action' => ActivityAction::ADD,
-                'data_changes' => $changes
-            ]);
+            $model->logActivityAndNotify($model, ActivityAction::ADD, $changes);
         });
 
         static::updated(function ($model) {
@@ -35,17 +34,13 @@ trait HasActivity
                 ->mapWithKeys(function ($newValue, $field) use ($model) {
                     return [$field => [
                         'old' => $model->getOriginal($field),
-                        'new' => $newValue
+                        'new' => $newValue,
                     ]];
                 })
                 ->toArray();
 
-            if (!empty($changes)) {
-                $model->activities()->create([
-                    'user_id' => Auth::id(),
-                    'action' => ActivityAction::UPDATE,
-                    'data_changes' => $changes
-                ]);
+            if (! empty($changes)) {
+                $model->logActivityAndNotify($model, ActivityAction::UPDATE, $changes);
             }
         });
 
@@ -55,16 +50,12 @@ trait HasActivity
                 ->mapWithKeys(function ($value, $field) {
                     return [$field => [
                         'old' => $value,
-                        'new' => null
+                        'new' => null,
                     ]];
                 })
                 ->toArray();
 
-            $model->activities()->create([
-                'user_id' => Auth::id(),
-                'action' => ActivityAction::DELETE,
-                'data_changes' => $original
-            ]);
+            $model->logActivityAndNotify($model, ActivityAction::DELETE, $original);
         });
 
         static::restored(function ($model) {
@@ -73,16 +64,12 @@ trait HasActivity
                 ->mapWithKeys(function ($value, $field) {
                     return [$field => [
                         'old' => null,
-                        'new' => $value
+                        'new' => $value,
                     ]];
                 })
                 ->toArray();
 
-            $model->activities()->create([
-                'user_id' => Auth::id(),
-                'action' => ActivityAction::RESTORE,
-                'data_changes' => $changes
-            ]);
+            $model->logActivityAndNotify($model, ActivityAction::RESTORE, $changes);
         });
 
         static::forceDeleted(function ($model) {
@@ -91,21 +78,46 @@ trait HasActivity
                 ->mapWithKeys(function ($value, $field) {
                     return [$field => [
                         'old' => $value,
-                        'new' => null
+                        'new' => null,
                     ]];
                 })
                 ->toArray();
 
-            $model->activities()->create([
-                'user_id' => Auth::id(),
-                'action' => ActivityAction::DELETE,
-                'data_changes' => $original
-            ]);
+            $model->logActivityAndNotify($model, ActivityAction::DELETE, $original);
         });
     }
 
     public function activities()
     {
         return $this->morphMany(Activity::class, 'model');
+    }
+
+    private function logActivityAndNotify($model, $action, $changes)
+    {
+        $activity = $model->activities()->create([
+            'user_id' => Auth::id(),
+            'action' => $action,
+            'data_changes' => $changes,
+        ]);
+
+        // Send email notification
+        try {
+            $user = Auth::user();
+            $modelName = class_basename($model);
+
+            // TODO change to actual emails TO
+            Mail::to('admin@example.com')
+                ->queue(new ActivityLogMail(
+                    $user,
+                    $action,
+                    $changes,
+                    $modelName,
+                    Carbon::now()
+                ));
+        } catch (\Exception $e) {
+            Log::error('Failed to send activity log email: '.$e->getMessage());
+        }
+
+        return $activity;
     }
 }

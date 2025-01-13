@@ -45,14 +45,14 @@ Route::group(['prefix' => 'v1'], function () {
             Route::delete('/{id}', [ProjectController::class, 'softDelete'])->middleware('permission:'.pn(Permission::PROJECT_DELETE_OWN));
 
             Route::group(['prefix' => '{id}/members'], function () {
-                Route::get('/', [ProjectMemberController::class, 'getPaginatedList'])->middleware('permission:'.pn(Permission::PROJECT_MEMBER_VIEW));
-                Route::post('/', [ProjectMemberController::class, 'add'])->middleware('permission:'.pn(Permission::PROJECT_MEMBER_ADD));
-                Route::delete('/{memberId}', [ProjectMemberController::class, 'softRemove'])->middleware('permission:'.pn(Permission::PROJECT_MEMBER_REMOVE_OWN));
+                Route::get('/users', [ProjectMemberController::class, 'getMembers'])->middleware('permission:'.pn(Permission::PROJECT_MEMBER_VIEW));
+                Route::post('/users/', [ProjectMemberController::class, 'add'])->middleware('permission:'.pn(Permission::PROJECT_MEMBER_ADD));
+                Route::delete('/users/{userId}', [ProjectMemberController::class, 'softRemove'])->middleware('permission:'.pn(Permission::PROJECT_MEMBER_REMOVE_OWN));
             });
 
             Route::group(['prefix' => '{id}/permissions'], function () {
-                Route::get('/', [ProjectPermissionController::class, 'getUserProjectPermissions'])->middleware('permission:'.pn(Permission::PROJECT_USER_PERMISSION_VIEW_OWN));
-                Route::patch('/{userId}', [ProjectPermissionController::class, 'updateUserProjectPermissions'])->middleware('permission:'.pn(Permission::PROJECT_USER_PERMISSION_EDIT));
+                Route::get('/users/{userId}', [ProjectPermissionController::class, 'getUserProjectPermissions'])->middleware('permission:'.pn(Permission::PROJECT_USER_PERMISSION_VIEW_OWN));
+                Route::patch('/users/{userId}', [ProjectPermissionController::class, 'updateUserProjectPermissions'])->middleware('permission:'.pn(Permission::PROJECT_USER_PERMISSION_EDIT));
             });
 
             Route::group(['prefix' => '{id}/tasks'], function () {

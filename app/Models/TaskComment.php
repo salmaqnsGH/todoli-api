@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class TaskComment extends Model
 {
-    use SoftDeletes, HasActivity;
+    use HasActivity, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

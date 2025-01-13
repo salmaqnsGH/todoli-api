@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Pagination\Paginator;
 use App\Http\Requests\Api\GetPaginatedListRequest;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Validator;
 
 abstract class PaginationService
@@ -26,7 +26,7 @@ abstract class PaginationService
             'sort_field' => [
                 'sometimes',
                 'string',
-                'in:' . implode(',', $this->getPaginationAllowedSortFields())
+                'in:'.implode(',', $this->getPaginationAllowedSortFields()),
             ],
             'sort_direction' => 'sometimes|string|in:asc,desc',
         ]);

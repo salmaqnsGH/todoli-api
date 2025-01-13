@@ -4,5 +4,5 @@ namespace App\Constants;
 
 class Value
 {
-    const ALL = "all";
+    const ALL = 'all';
 }

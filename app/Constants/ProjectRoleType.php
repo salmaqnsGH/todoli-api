@@ -2,6 +2,7 @@
 
 namespace App\Constants;
 
+// This is deprecated, should not used
 class ProjectRoleType
 {
     const OWNER = 1;

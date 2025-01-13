@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\Project;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Project\UpdateUserProjectPermissionRequest;
+use App\Http\Requests\AppRequest;
 use App\Services\Api\Project\ProjectPermissionService;
-use Illuminate\Http\Request;
 
 class ProjectPermissionController extends Controller
 {
@@ -13,18 +13,17 @@ class ProjectPermissionController extends Controller
         protected ProjectPermissionService $projectPermissionService,
     ) {}
 
-    public function getUserProjectPermissions(Request $request)
+    public function getUserProjectPermissions(AppRequest $request)
     {
-        // TODO implement this
         $result = $this->projectPermissionService->getUserProjectPermissions($request);
 
-        return jsonresSuccess($request, 'OK', []);
+        return jsonresSuccess($request, 'Success get list data', $result);
     }
 
     public function updateUserProjectPermissions(UpdateUserProjectPermissionRequest $request)
     {
         // TODO implement this
-        $result = $this->projectPermissionService->getUserProjectPermissions($request);
+        $result = $this->projectPermissionService->updateUserProjectPermissions($request);
 
         return jsonresSuccess($request, 'OK', []);
     }

@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use App\Constants\ProjectRoleType;
+use App\Constants\UserRole;
 use App\Traits\HasActivity;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 /**
  * @mixin Builder
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property string $name
  * @property string|null $description
- * @property int $role_type
+ * @property int $user_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon|null $deleted_at
@@ -29,35 +30,33 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Project extends Model
 {
-    use SoftDeletes, HasActivity;
+    use HasActivity, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
-    protected $fillable = ['name', 'description', 'role_type'];
+    protected $fillable = ['name', 'description', 'user_id'];
 
-    public function owner(): User
-    {
-        return $this->all_members()
-            ->wherePivot('role_type', ProjectRoleType::OWNER)
-            ->first();
-    }
+    protected $appends = ['short_hash'];
 
-    // Members including owner
-    public function all_members(): BelongsToMany
+    public function owner(): BelongsTo
     {
-        return $this->belongsToMany(User::class, 'project_members')
-            ->withPivot('role_type')
-            ->withTimestamps();
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     // Members excluding owner
-    public function team_members()
+    public function members()
     {
-        return $this->all_members()
-            ->wherePivot('role_type', ProjectRoleType::TEAM_MEMBER);
+        return $this->hasManyThrough(
+            User::class,
+            ProjectMember::class,
+            'project_id',  // Foreign key on project_members table
+            'id',          // Foreign key on users table
+            'id',          // Local key on projects table
+            'user_id'      // Local key on project_members table
+        )->where('project_members.role_id', UserRole::USER_MEMBER);
     }
 
     public function tasks(): HasMany
@@ -68,5 +67,16 @@ class Project extends Model
     public function activities(): MorphMany
     {
         return $this->morphMany(Activity::class, 'model');
+    }
+
+    public function getShortHashAttribute(): string
+    {
+        $input = $this->id.'_'.$this->name;
+
+        return Str::substr(
+            md5($input),
+            0,
+            8
+        );
     }
 }

@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class ProjectCategory extends Model
 {
-    use SoftDeletes, HasActivity;
+    use HasActivity, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

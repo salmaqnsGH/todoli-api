@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class TaskStatus extends Model
 {
-    use SoftDeletes, HasActivity;
+    use HasActivity, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

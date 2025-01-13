@@ -23,7 +23,7 @@ class AddProjectMemberRequest extends BaseRequest
     {
         return [
             'user_id' => 'required|integer|exists:users,id',
-            'role_type' => 'required|string|max:255',
+            'role_id' => 'required|integer|exists:roles,id',
         ];
     }
 }
