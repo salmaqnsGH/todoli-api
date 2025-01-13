@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property int $id
  * @property int $project_id
+ * @property int $user_id
+ * @property int $priority_id
  * @property int $status_id
  * @property string $name
  * @property string|null $objective
@@ -42,6 +44,7 @@ class Task extends Model
      */
     protected $fillable = [
         'project_id',
+        'user_id',
         'priority_id',
         'status_id',
         'name',

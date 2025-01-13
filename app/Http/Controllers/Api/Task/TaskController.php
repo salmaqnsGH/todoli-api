@@ -9,8 +9,8 @@ use App\Http\Requests\Api\Task\CreateTaskRequest;
 use App\Http\Requests\Api\Task\SetTaskPriorityRequest;
 use App\Http\Requests\Api\Task\SetTaskStatusRequest;
 use App\Http\Requests\Api\Task\UpdateTaskRequest;
+use App\Http\Requests\AppRequest;
 use App\Services\Api\Task\TaskService;
-use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
@@ -20,65 +20,57 @@ class TaskController extends Controller
 
     public function getPaginatedList(GetPaginatedListRequest $request)
     {
-        // TODO implement this
         $result = $this->taskService->getPaginatedList($request);
 
-        return jsonresSuccess($request, 'OK', []);
+        return jsonresSuccess($request, 'Success get list data', $result);
     }
 
-    public function getDetail(Request $request)
+    public function getDetail(AppRequest $request)
     {
-        // TODO implement this
         $result = $this->taskService->getDetail($request);
 
-        return jsonresSuccess($request, 'OK', []);
+        return jsonresSuccess($request, 'Success get data', $result);
     }
 
     public function create(CreateTaskRequest $request)
     {
-        // TODO implement this
         $result = $this->taskService->create($request);
 
-        return jsonresCreated($request, 'OK', []);
+        return jsonresCreated($request, 'Success create data', $result);
     }
 
     public function update(UpdateTaskRequest $request)
     {
-        // TODO implement this
         $result = $this->taskService->update($request);
 
-        return jsonresSuccess($request, 'OK', []);
+        return jsonresSuccess($request, 'Success update data', $result);
     }
 
-    public function softDelete(Request $request)
+    public function softDelete(AppRequest $request)
     {
-        // TODO implement this
         $result = $this->taskService->softDelete($request);
 
-        return jsonresSuccess($request, 'OK', []);
+        return jsonresSuccess($request, 'Data is deleted', $result);
     }
 
     public function assignUser(AssignTaskUserRequest $request)
     {
-        // TODO implement this
         $result = $this->taskService->assignUser($request);
 
-        return jsonresSuccess($request, 'OK', []);
+        return jsonresSuccess($request, 'Task user is assigned', $result);
     }
 
     public function setStatus(SetTaskStatusRequest $request)
     {
-        // TODO implement this
         $result = $this->taskService->setStatus($request);
 
-        return jsonresSuccess($request, 'OK', []);
+        return jsonresSuccess($request, 'Task status is set', $result);
     }
 
     public function setPriority(SetTaskPriorityRequest $request)
     {
-        // TODO implement this
         $result = $this->taskService->setPriority($request);
 
-        return jsonresSuccess($request, 'OK', []);
+        return jsonresSuccess($request, 'Task priority is set', $result);
     }
 }

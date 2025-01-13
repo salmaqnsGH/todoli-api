@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 abstract class PaginationService
 {
-    abstract protected function getPaginationBaseQuery(): Builder;
+    abstract protected function getPaginationBaseQuery(GetPaginatedListRequest $request): Builder;
 
     abstract protected function getPaginationAllowedSortFields(): array;
 
@@ -44,7 +44,7 @@ abstract class PaginationService
         $page = is_numeric($request->input('page')) ? (int) $request->input('page') : 1;
         $perPage = is_numeric($request->input('per_page')) ? (int) $request->input('per_page') : 0;
 
-        $query = $this->getPaginationBaseQuery();
+        $query = $this->getPaginationBaseQuery($request);
 
         if ($perPage <= 0) {
             $perPage = $query->count();

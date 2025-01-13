@@ -59,7 +59,7 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::get('/', [TaskController::class, 'getPaginatedList'])->middleware('permission:'.pn(Permission::TASK_VIEW_OWN));
                 Route::get('/{taskId}', [TaskController::class, 'getDetail'])->middleware('permission:'.pn(Permission::TASK_VIEW_OWN));
                 Route::post('/', [TaskController::class, 'create'])->middleware('permission:'.pn(Permission::TASK_ADD));
-                Route::patch('/{taskId}', [TaskController::class, 'update'])->middleware('permission:'.pn(Permission::TASK_EDIT_OWN));
+                Route::post('/{taskId}', [TaskController::class, 'update'])->middleware('permission:'.pn(Permission::TASK_EDIT_OWN));
                 Route::delete('/{taskId}', [TaskController::class, 'softDelete'])->middleware('permission:'.pn(Permission::TASK_DELETE_OWN));
                 Route::post('/{taskId}/assign-user', [TaskController::class, 'assignUser'])->middleware('permission:'.pn(Permission::TASK_USER_ASSIGN));
                 Route::post('/{taskId}/set-status', [TaskController::class, 'setStatus'])->middleware('permission:'.pn(Permission::TASK_STATUS_SET_OWN));

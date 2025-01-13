@@ -3,6 +3,7 @@
 namespace App\Services\Api\Project;
 
 use App\Constants\Value;
+use App\Http\Requests\Api\GetPaginatedListRequest;
 use App\Http\Requests\Api\Project\CreateProjectRequest;
 use App\Http\Requests\Api\Project\UpdateProjectRequest;
 use App\Http\Requests\AppRequest;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ProjectService extends PaginationService
 {
-    protected function getPaginationBaseQuery(): Builder
+    protected function getPaginationBaseQuery(GetPaginatedListRequest $request): Builder
     {
         return Project::with('owner')
             ->select('id', 'user_id', 'name', 'description', 'created_at');

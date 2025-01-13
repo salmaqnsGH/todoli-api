@@ -3,6 +3,7 @@
 namespace App\Services\Api\Task;
 
 use App\Constants\Value;
+use App\Http\Requests\Api\GetPaginatedListRequest;
 use App\Http\Requests\Api\Task\CreateTaskStatusRequest;
 use App\Http\Requests\Api\Task\UpdateTaskStatusRequest;
 use App\Http\Requests\AppRequest;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class TaskStatusService extends PaginationService
 {
-    protected function getPaginationBaseQuery(): Builder
+    protected function getPaginationBaseQuery(GetPaginatedListRequest $request): Builder
     {
         return TaskStatus::select('id', 'name');
     }

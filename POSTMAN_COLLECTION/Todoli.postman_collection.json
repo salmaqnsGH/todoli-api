@@ -1,0 +1,1970 @@
+{
+	"info": {
+		"_postman_id": "071ccf24-7037-4d31-a9ec-154987c3c2ed",
+		"name": "Todoli",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5780003"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Sign Up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "organization_name",
+									"value": "Orgx",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "Salma",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "this@sal.ma",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "thisis5alma",
+									"type": "text"
+								},
+								{
+									"key": "password_confirmation",
+									"value": "thisis5alma",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "Sal",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Ma",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/signup",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign In",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let responseData = pm.response.json();\r",
+									"\r",
+									"if (responseData.success) {\r",
+									"    pm.environment.set(\"TODOLI_AUTH_TOKEN\", responseData.data.access_token);\r",
+									"} else {\r",
+									"    console.log(\"Response was not successful. Global variables not set.\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"this@sal.ma\",\r\n    \"password\": \"thisis5alma\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/signin",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"signin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"this@sal.ma\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/forgot",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"forgot"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"new_password\": \"thisis5alma\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/password",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign Out",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/signout",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"signout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Update Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"new_password\": \"thisis5alma\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/users/password",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"users",
+								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/users/profile",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "Salma",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "this@sal.ma",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "Sal",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Ma",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/users/profile",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Organization",
+			"item": [
+				{
+					"name": "Paginated List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/organizations",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"organizations"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "xyz",
+									"disabled": true
+								},
+								{
+									"key": "filters",
+									"value": "id:1",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "sort_field",
+									"value": "name",
+									"disabled": true
+								},
+								{
+									"key": "sort_direction",
+									"value": "asc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/organizations/1",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"organizations",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"New Org\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/organizations",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"organizations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"New Orgx\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/organizations/2",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"organizations",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/organizations/2",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"organizations",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Project",
+			"item": [
+				{
+					"name": "Project Member",
+					"item": [
+						{
+							"name": "Paginated List",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TODOLI_AUTH_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TODOLI_URL}}/projects/34/members/users",
+									"host": [
+										"{{TODOLI_URL}}"
+									],
+									"path": [
+										"projects",
+										"34",
+										"members",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Member",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TODOLI_AUTH_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_id\": 5,\r\n    \"role_id\": 3\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TODOLI_URL}}/projects/34/members/users",
+									"host": [
+										"{{TODOLI_URL}}"
+									],
+									"path": [
+										"projects",
+										"34",
+										"members",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove Member",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TODOLI_AUTH_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{TODOLI_URL}}/projects/34/members/users/5",
+									"host": [
+										"{{TODOLI_URL}}"
+									],
+									"path": [
+										"projects",
+										"34",
+										"members",
+										"users",
+										"5"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Project Permission",
+					"item": [
+						{
+							"name": "User Permission",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TODOLI_AUTH_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TODOLI_URL}}/projects/34/permissions/users/19",
+									"host": [
+										"{{TODOLI_URL}}"
+									],
+									"path": [
+										"projects",
+										"34",
+										"permissions",
+										"users",
+										"19"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update User Permission",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TODOLI_AUTH_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"permission_ids\": []\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TODOLI_URL}}/projects/34/permissions/users/19",
+									"host": [
+										"{{TODOLI_URL}}"
+									],
+									"path": [
+										"projects",
+										"34",
+										"permissions",
+										"users",
+										"19"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Paginated List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/projects",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"projects"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "project",
+									"disabled": true
+								},
+								{
+									"key": "filters",
+									"value": "id:1",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "sort_field",
+									"value": "name",
+									"disabled": true
+								},
+								{
+									"key": "sort_direction",
+									"value": "asc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/projects/34",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"projects",
+								"34"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"A\",\r\n    \"description\": null,\r\n    \"user_ids\": [\r\n        2,\r\n        5\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/projects",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"B\",\r\n    \"description\": null,\r\n    \"user_ids\": [\r\n        2\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/projects/34",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"projects",
+								"34"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/projects/1",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"projects",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task",
+			"item": [
+				{
+					"name": "Task Comment",
+					"item": [
+						{
+							"name": "Paginated List",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TODOLI_AUTH_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TODOLI_URL}}/projects/34/tasks/1/comments",
+									"host": [
+										"{{TODOLI_URL}}"
+									],
+									"path": [
+										"projects",
+										"34",
+										"tasks",
+										"1",
+										"comments"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "xyz",
+											"disabled": true
+										},
+										{
+											"key": "filters",
+											"value": "id:1",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "per_page",
+											"value": "100",
+											"disabled": true
+										},
+										{
+											"key": "sort_field",
+											"value": "updated_at",
+											"disabled": true
+										},
+										{
+											"key": "sort_direction",
+											"value": "asc",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Detail",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TODOLI_AUTH_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TODOLI_URL}}/projects/34/tasks/1/comments/3",
+									"host": [
+										"{{TODOLI_URL}}"
+									],
+									"path": [
+										"projects",
+										"34",
+										"tasks",
+										"1",
+										"comments",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TODOLI_AUTH_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"content\": \"Lorem ipsum\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TODOLI_URL}}/projects/34/tasks/1/comments",
+									"host": [
+										"{{TODOLI_URL}}"
+									],
+									"path": [
+										"projects",
+										"34",
+										"tasks",
+										"1",
+										"comments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TODOLI_AUTH_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"content\": \"Lorem ipsum 2\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TODOLI_URL}}/projects/34/tasks/1/comments/3",
+									"host": [
+										"{{TODOLI_URL}}"
+									],
+									"path": [
+										"projects",
+										"34",
+										"tasks",
+										"1",
+										"comments",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TODOLI_AUTH_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{TODOLI_URL}}/projects/34/tasks/1/comments/3",
+									"host": [
+										"{{TODOLI_URL}}"
+									],
+									"path": [
+										"projects",
+										"34",
+										"tasks",
+										"1",
+										"comments",
+										"3"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Paginated List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/projects/34/tasks?search=a",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"projects",
+								"34",
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "a"
+								},
+								{
+									"key": "filters",
+									"value": "id:1",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "sort_field",
+									"value": "name",
+									"disabled": true
+								},
+								{
+									"key": "sort_direction",
+									"value": "asc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/projects/34/tasks/1",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"projects",
+								"34",
+								"tasks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "A",
+									"type": "text"
+								},
+								{
+									"key": "priority_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "A",
+									"type": "text"
+								},
+								{
+									"key": "objective",
+									"value": "null",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "additional_notes",
+									"value": "null",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "due_date",
+									"value": "2025-01-01 20:20",
+									"type": "text"
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": "/C:/Users/andri/OneDrive/Documents/samples/sample_photo.png",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/projects/34/tasks",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"projects",
+								"34",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "A update",
+									"type": "text"
+								},
+								{
+									"key": "priority_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "A",
+									"type": "text"
+								},
+								{
+									"key": "objective",
+									"value": "null",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "additional_notes",
+									"value": "null",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "due_date",
+									"value": "2025-01-01 20:20",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/projects/34/tasks/1",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"projects",
+								"34",
+								"tasks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/projects/1/tasks/1",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"projects",
+								"1",
+								"tasks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/projects/34/tasks/1/assign-user",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"projects",
+								"34",
+								"tasks",
+								"1",
+								"assign-user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status_id\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/projects/34/tasks/1/set-status",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"projects",
+								"34",
+								"tasks",
+								"1",
+								"set-status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set Priority",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"priority_id\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/projects/34/tasks/1/set-priority",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"projects",
+								"34",
+								"tasks",
+								"1",
+								"set-priority"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task Priority",
+			"item": [
+				{
+					"name": "Paginated List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/task-priorities",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"task-priorities"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "high",
+									"disabled": true
+								},
+								{
+									"key": "filters",
+									"value": "id:1",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "sort_field",
+									"value": "name",
+									"disabled": true
+								},
+								{
+									"key": "sort_direction",
+									"value": "asc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/task-priorities/1",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"task-priorities",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Highest\",\r\n    \"color\": \"dark-red\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/task-priorities",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"task-priorities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Highest\",\r\n    \"color\": \"dark-red\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/task-priorities/1",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"task-priorities",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/task-priorities/1",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"task-priorities",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task Status",
+			"item": [
+				{
+					"name": "Paginated List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/task-statuses",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"task-statuses"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "done",
+									"disabled": true
+								},
+								{
+									"key": "filters",
+									"value": "id:1",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "sort_field",
+									"value": "name",
+									"disabled": true
+								},
+								{
+									"key": "sort_direction",
+									"value": "asc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/task-statuses/1",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"task-statuses",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Todo\",\r\n    \"color\": \"grey\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/task-statuses",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"task-statuses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Highest\",\r\n    \"color\": \"dark-red\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/task-statuses/1",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"task-statuses",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/task-statuses/1",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"task-statuses",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Activity",
+			"item": [
+				{
+					"name": "User Activity Paginated List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/activities/user",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"activities",
+								"user"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "xyz",
+									"disabled": true
+								},
+								{
+									"key": "filters",
+									"value": "id:1",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -22,7 +22,7 @@ class RegisterRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'organization_id' => 'required|integer|exists:organizations,id',
+            'organization_name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',

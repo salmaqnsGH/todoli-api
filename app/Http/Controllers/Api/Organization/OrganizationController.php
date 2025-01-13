@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\GetPaginatedListRequest;
 use App\Http\Requests\Api\Organization\CreateOrganizationRequest;
 use App\Http\Requests\Api\Organization\UpdateOrganizationRequest;
+use App\Http\Requests\AppRequest;
 use App\Services\Api\Organization\OrganizationService;
-use Illuminate\Http\Request;
 
 class OrganizationController extends Controller
 {
@@ -17,41 +17,36 @@ class OrganizationController extends Controller
 
     public function getPaginatedList(GetPaginatedListRequest $request)
     {
-        // TODO implement this
         $result = $this->organizationService->getPaginatedList($request);
 
-        return jsonresSuccess($request, 'OK', []);
+        return jsonresSuccess($request, 'Success get list data', $result);
     }
 
-    public function getDetail(Request $request)
+    public function getDetail(AppRequest $request)
     {
-        // TODO implement this
         $result = $this->organizationService->getDetail($request);
 
-        return jsonresSuccess($request, 'OK', []);
+        return jsonresSuccess($request, 'Success get data', $result);
     }
 
     public function create(CreateOrganizationRequest $request)
     {
-        // TODO implement this
         $result = $this->organizationService->create($request);
 
-        return jsonresCreated($request, 'OK', []);
+        return jsonresCreated($request, 'Success create data', $result);
     }
 
     public function update(UpdateOrganizationRequest $request)
     {
-        // TODO implement this
         $result = $this->organizationService->update($request);
 
-        return jsonresSuccess($request, 'OK', []);
+        return jsonresSuccess($request, 'Success update data', $result);
     }
 
-    public function softDelete(Request $request)
+    public function softDelete(AppRequest $request)
     {
-        // TODO implement this
         $result = $this->organizationService->softDelete($request);
 
-        return jsonresSuccess($request, 'OK', []);
+        return jsonresSuccess($request, 'Data is deleted', $result);
     }
 }

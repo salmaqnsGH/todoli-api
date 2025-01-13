@@ -11,6 +11,7 @@ use App\Services\Api\Auth\ForgotAccountService;
 use App\Services\Api\Auth\LoginService;
 use App\Services\Api\Auth\LogoutService;
 use App\Services\Api\Auth\RegisterService;
+use App\Services\Api\Organization\OrganizationService;
 use App\Services\Api\User\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,6 +24,7 @@ class AuthController extends Controller
         protected LogoutService $logoutService,
         protected ForgotAccountService $forgotAccountService,
         protected UserService $userService,
+        protected OrganizationService $organizationService,
     ) {}
 
     public function register(RegisterRequest $request)
@@ -30,7 +32,17 @@ class AuthController extends Controller
         try {
             DB::beginTransaction();
 
-            $user = $this->registerService->createUser($request->validated());
+            $validatedRequest = $request->validated();
+            $organizationNameRequest = $validatedRequest['organization_name'];
+
+            $organization = $this->organizationService->getByNameWithoutFail($organizationNameRequest);
+            if (empty($organization)) {
+                $data = ['name' => $organizationNameRequest];
+                $organization = $this->organizationService->create(null, $data);
+            }
+
+            $validatedRequest['organization_id'] = $organization->id;
+            $user = $this->registerService->createUser($validatedRequest);
 
             $this->registerService->assignRole($user, UserRole::USER_MEMBER);
 
