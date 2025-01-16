@@ -4,20 +4,19 @@ namespace App\Services\Api\User;
 
 use App\Http\Requests\Api\User\UpdatePasswordRequest;
 use App\Http\Requests\Api\User\UpdateProfileRequest;
+use App\Http\Requests\AppRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class UserService
 {
-    private function getActiveQuery()
+    public function getById(AppRequest $request)
     {
-        return User::whereNull('deleted_at');
+        return User::findOrFail($request->getId());
     }
 
     public function getByEmail(string $email)
     {
-        return $this->getActiveQuery()
-            ->where('email', $email)
+        return User::where('email', $email)
             ->firstOrFail();
     }
 
@@ -26,7 +25,7 @@ class UserService
         return is_not_null($user->email_verified_at);
     }
 
-    public function getProfile(Request $request)
+    public function getProfile(AppRequest $request)
     {
         return null;
     }

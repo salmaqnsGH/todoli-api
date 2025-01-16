@@ -5,6 +5,9 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Constants\UserRole;
+use App\Mail\Auth\CustomResetPassword;
+use App\Mail\Auth\CustomVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -12,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -25,6 +29,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $first_name
  * @property string|null $last_name
  * @property string|null $image
+ * @property string|null $image_url
  * @property Carbon $email_verified_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -35,7 +40,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read Project[] $team_member_projects
  * @property-read TaskComment[] $task_comments
  */
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, HasRoles, Notifiable, SoftDeletes;
@@ -64,7 +69,15 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'image',
     ];
+
+    /**
+     * The attributes that are appended to the result.
+     *
+     * @var list<string>
+     */
+    protected $appends = ['image_url'];
 
     /**
      * Get the attributes that should be cast.
@@ -77,6 +90,16 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new CustomVerifyEmail);
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new CustomResetPassword($token));
     }
 
     public function organization(): BelongsTo
@@ -106,5 +129,20 @@ class User extends Authenticatable
     public function task_comments(): HasMany
     {
         return $this->hasMany(TaskComment::class, 'user_id');
+    }
+
+    public function getImageUrlAttribute(): string
+    {
+        /** @var \Illuminate\Filesystem\FilesystemAdapter */
+        $disk = Storage::disk('public');
+
+        return $this->image
+            ? $disk->url($this->image)
+            : $this->getDefaultImageUrl();
+    }
+
+    private function getDefaultImageUrl(): string
+    {
+        return asset('images/default-profile.png');
     }
 }

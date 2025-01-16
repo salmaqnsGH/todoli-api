@@ -28,7 +28,7 @@ class RegisterRequest extends BaseRequest
             'password' => 'required|string|min:8|confirmed',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'image' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:10240',  // max 10MB per file (10240KB)
         ];
     }
 }

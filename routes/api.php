@@ -17,10 +17,18 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'v1'], function () {
     Route::post('/signin', [AuthController::class, 'login']);
     Route::post('/signup', [AuthController::class, 'register']);
-    Route::post('/forgot', [AuthController::class, 'forgotAccount']);
-    Route::post('/password', [UserController::class, 'updatePassword']);
+    Route::post('/forgot', [AuthController::class, 'forgotPassword'])
+        ->middleware('throttle:6,1');
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])
+        ->middleware('throttle:6,1');
 
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/account/verify/{id}/{hash}', [AuthController::class, 'verifyAccount'])
+        ->middleware(['signed']);
+
+    Route::post('/account/resend-verification', [AuthController::class, 'resendEmailVerificationAccount'])
+        ->middleware('throttle:6,1');
+
+    Route::middleware(['user_verified', 'auth:sanctum'])->group(function () {
         Route::post('/signout', [AuthController::class, 'logout']);
 
         Route::group(['prefix' => 'users'], function () {

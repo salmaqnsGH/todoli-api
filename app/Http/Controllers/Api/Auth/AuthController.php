@@ -4,17 +4,24 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Constants\UserRole;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Auth\ForgotAccountRequest;
+use App\Http\Requests\Api\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Api\Auth\LoginRequest;
 use App\Http\Requests\Api\Auth\RegisterRequest;
+use App\Http\Requests\Api\Auth\ResendVerificationEmailRequest;
+use App\Http\Requests\Api\Auth\ResetPasswordRequest;
+use App\Http\Requests\AppRequest;
 use App\Services\Api\Auth\ForgotAccountService;
 use App\Services\Api\Auth\LoginService;
 use App\Services\Api\Auth\LogoutService;
 use App\Services\Api\Auth\RegisterService;
 use App\Services\Api\Organization\OrganizationService;
+use App\Services\Api\User\UserProfileImageService;
 use App\Services\Api\User\UserService;
-use Illuminate\Http\Request;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -24,6 +31,7 @@ class AuthController extends Controller
         protected LogoutService $logoutService,
         protected ForgotAccountService $forgotAccountService,
         protected UserService $userService,
+        protected UserProfileImageService $userProfileImageService,
         protected OrganizationService $organizationService,
     ) {}
 
@@ -46,7 +54,14 @@ class AuthController extends Controller
 
             $this->registerService->assignRole($user, UserRole::USER_MEMBER);
 
-            // TODO implement saving image profile
+            if ($request->hasFile('image')) {
+                $profileImagePath = $this->userProfileImageService->store($request->file('image'));
+                $user->image = $profileImagePath;
+                $user->save();
+            }
+
+            // Send verification email
+            $user->sendEmailVerificationNotification();
 
             $responseData = [
                 'user' => $user,
@@ -56,6 +71,7 @@ class AuthController extends Controller
 
             return jsonresCreated($request, 'Success sign up', $responseData);
         } catch (\Exception $e) {
+            $this->userProfileImageService->delete($profileImagePath);
             DB::rollback();
             throw $e;
         }
@@ -83,7 +99,7 @@ class AuthController extends Controller
         return jsonresSuccess($request, 'Success sign in', $responseData);
     }
 
-    public function logout(Request $request)
+    public function logout(AppRequest $request)
     {
         $this->logoutService->deleteAccessToken($request);
 
@@ -92,12 +108,78 @@ class AuthController extends Controller
         return jsonresSuccess($request, 'Success sign out');
     }
 
-    public function forgotAccount(ForgotAccountRequest $request)
+    public function forgotPassword(ForgotPasswordRequest $request)
     {
-        // TODO implement this
-        $result = $this->forgotAccountService->findByEmail($request);
-        $result = $this->forgotAccountService->sendEmailForUpdatePassword();
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
 
-        return jsonresSuccess($request, 'OK', []);
+        if ($status === Password::RESET_LINK_SENT) {
+            return jsonresSuccess($request, 'An email is sent');
+        }
+
+        return jsonresServerError($request, 'Internal server error');
+    }
+
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => $password,
+                    'remember_token' => Str::random(60),
+                ])->save();
+
+                event(new PasswordReset($user));
+            }
+        );
+
+        if ($status === Password::PASSWORD_RESET) {
+            return jsonresSuccess($request, 'Password successfully updated');
+        }
+
+        return jsonresServerError($request, 'Internal server error');
+    }
+
+    /**
+     * Handle the email verification request
+     */
+    public function verifyAccount(AppRequest $request)
+    {
+        $user = $this->userService->getById($request);
+
+        if (!hash_equals(
+            (string) $request->route('hash'),
+            sha1($user->getEmailForVerification())
+        )) {
+            return jsonresBadRequest($request, 'Invalid verification link');
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return jsonresSuccess($request, 'Email already verified');
+        }
+
+        $user->markEmailAsVerified();
+
+        event(new Verified($user));
+
+        return jsonresSuccess($request, 'Email verified successfully');
+    }
+
+    /**
+     * Resend verification email
+     */
+    public function resendEmailVerificationAccount(ResendVerificationEmailRequest $request)
+    {
+        $user = $this->userService->getByEmail($request->email);
+
+        if ($user->hasVerifiedEmail()) {
+            return jsonresSuccess($request, 'Email already verified');
+        }
+
+        $user->sendEmailVerificationNotification();
+
+        return jsonresSuccess($request, 'Verification link sent');
     }
 }

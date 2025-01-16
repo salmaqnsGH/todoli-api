@@ -4,11 +4,12 @@ namespace App\Mail\Activity;
 
 use App\Constants\ActivityAction;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Carbon;
 
-class ActivityLogMail extends Mailable
+class ActivityLogMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 

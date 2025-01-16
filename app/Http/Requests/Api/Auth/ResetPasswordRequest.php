@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\Auth;
 
 use App\Http\Requests\Api\BaseRequest;
 
-class ForgotAccountRequest extends BaseRequest
+class ResetPasswordRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,9 @@ class ForgotAccountRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email',
+            'token' => 'required|string',
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|string|min:8|confirmed',
         ];
     }
 }

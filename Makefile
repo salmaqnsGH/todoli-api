@@ -80,3 +80,15 @@ serve:
 
 clear:
 	php artisan optimize:clear
+
+link-storage:
+	php artisan storage:link
+
+queue-listen:
+	php artisan queue:listen
+
+queue-work:
+	php artisan queue:work
+
+queue-flush:
+	php artisan queue:clear && php artisan queue:flush
