@@ -15,6 +15,13 @@ use App\Http\Controllers\Api\User\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'v1'], function () {
+    Route::get('/ping', function () {
+        return response()->json([
+            'message' => 'pong',
+            'status' => 200
+        ], 200);
+    });
+
     Route::post('/signin', [AuthController::class, 'login']);
     Route::post('/signup', [AuthController::class, 'register']);
     Route::post('/forgot', [AuthController::class, 'forgotPassword'])
