@@ -23,7 +23,7 @@ Route::group(['prefix' => 'v1'], function () {
         ->middleware('throttle:6,1');
 
     Route::post('/account/verify/{id}/{hash}', [AuthController::class, 'verifyAccount'])
-        ->middleware(['signed']);
+        ->name('account.verify');
 
     Route::post('/account/resend-verification', [AuthController::class, 'resendEmailVerificationAccount'])
         ->middleware('throttle:6,1');

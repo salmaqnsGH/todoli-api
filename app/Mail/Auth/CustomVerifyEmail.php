@@ -17,7 +17,7 @@ class CustomVerifyEmail extends VerifyEmail implements ShouldQueue
     protected function verificationUrl($notifiable): string
     {
         $url = URL::temporarySignedRoute(
-            'verification.verify',
+            'account.verify',
             Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
             [
                 'id' => $notifiable->getKey(),

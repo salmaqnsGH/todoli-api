@@ -1,0 +1,121 @@
+name: Deploy Application
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: ${{ secrets.DB_DATABASE }}
+          MYSQL_USER: ${{ secrets.DB_USERNAME }}
+          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+    - uses: actions/checkout@v4
+
+    # Setup PHP
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql
+        tools: composer
+
+    # Cache Composer dependencies
+    - name: Get Composer cache directory
+      id: composer-cache
+      run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+    - name: Cache Composer dependencies
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-
+
+    # Install PHP dependencies
+    - name: Install PHP dependencies
+      run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+    # Check & Test application code
+    - name: Check & Test application code
+      env:
+        APP_ENV: testing
+        APP_KEY: ${{ secrets.APP_KEY }}
+        DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+        DB_DATABASE: ${{ secrets.DB_DATABASE }}
+        DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      run: |
+        make db-migrate
+
+    # Set Permissions Before Deployment
+    - name: Set Permissions Before Deployment
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.DO_HOST }}
+        username: ${{ secrets.DO_USERNAME }}
+        password: ${{ secrets.DO_PASSWORD }}
+        key: ${{ secrets.DO_SSH_KEY }}
+        script: |
+          echo ${{ secrets.DO_PASSWORD }} | sudo -S chown -R ${{ secrets.DO_USERNAME }} ${{ vars.APP_DIR }}/storage
+          echo ${{ secrets.DO_PASSWORD }} | sudo -S chown -R ${{ secrets.DO_USERNAME }} ${{ vars.APP_DIR }}/bootstrap/cache
+          echo ${{ secrets.DO_PASSWORD }} | sudo -S chmod -R 775 ${{ vars.APP_DIR }}/storage
+          echo ${{ secrets.DO_PASSWORD }} | sudo -S chmod -R 775 ${{ vars.APP_DIR }}/bootstrap/cache
+
+    # Upload the entire application to the droplet server
+    - name: Deploy to droplet server
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.DO_HOST }}
+        username: ${{ secrets.DO_USERNAME }}
+        key: ${{ secrets.DO_SSH_KEY }}
+        source: "."
+        target: ${{ vars.APP_DIR }}
+
+    # Reset Permissions After Deployment
+    - name: Reset Permissions After Deployment
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.DO_HOST }}
+        username: ${{ secrets.DO_USERNAME }}
+        password: ${{ secrets.DO_PASSWORD }}
+        key: ${{ secrets.DO_SSH_KEY }}
+        script: |
+          echo ${{ secrets.DO_PASSWORD }} | sudo -S chown -R www-data:www-data ${{ vars.APP_DIR }}/storage
+          echo ${{ secrets.DO_PASSWORD }} | sudo -S chown -R www-data:www-data ${{ vars.APP_DIR }}/bootstrap/cache
+          echo ${{ secrets.DO_PASSWORD }} | sudo -S chmod -R 775 ${{ vars.APP_DIR }}/storage
+          echo ${{ secrets.DO_PASSWORD }} | sudo -S chmod -R 775 ${{ vars.APP_DIR }}/bootstrap/cache
+
+    # SSH commands to run on the droplet server
+    - name: SSH Commands
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.DO_HOST }}
+        username: ${{ secrets.DO_USERNAME }}
+        password: ${{ secrets.DO_PASSWORD }}
+        key: ${{ secrets.DO_SSH_KEY }}
+        script: |
+          cd ${{ vars.APP_DIR }}
+          cp .env .env
+          php artisan migrate --force
+          php artisan optimize:clear
+          echo ${{ secrets.DO_PASSWORD }} | sudo -S systemctl restart nginx
+          echo ${{ secrets.DO_PASSWORD }} | sudo -S systemctl restart php8.2-fpm
