@@ -19,43 +19,43 @@
 							"formdata": [
 								{
 									"key": "organization_name",
-									"value": "Orgx",
+									"value": "TSMC",
 									"type": "text"
 								},
 								{
 									"key": "username",
-									"value": "Salma",
+									"value": "M2_TSMC",
 									"type": "text"
 								},
 								{
 									"key": "email",
-									"value": "this@sal.ma",
+									"value": "member2@tsmc.tw",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "thisis5alma",
+									"value": "=letMe1n",
 									"type": "text"
 								},
 								{
 									"key": "password_confirmation",
-									"value": "thisis5alma",
+									"value": "=letMe1n",
 									"type": "text"
 								},
 								{
 									"key": "first_name",
-									"value": "Sal",
+									"value": "Member 2",
 									"type": "text"
 								},
 								{
 									"key": "last_name",
-									"value": "Ma",
+									"value": "TSMC",
 									"type": "text"
 								},
 								{
 									"key": "image",
 									"type": "file",
-									"src": []
+									"src": "/C:/Users/andri/OneDrive/Documents/samples/sample_photo.png"
 								}
 							]
 						},
@@ -96,7 +96,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"this@sal.ma\",\r\n    \"password\": \"thisis5alma\"\r\n}",
+							"raw": "{\r\n    \"email\": \"member2@tesla.inc\",\r\n    \"password\": \"=letMe1n\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -116,7 +116,88 @@
 					"response": []
 				},
 				{
-					"name": "Forgot",
+					"name": "Verify Account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/account/verify/33/9088b078fa321400d9c6f354ff178e4ff035e629?expires=1737043228&signature=5acf32d648ee38856c7a2058b93e6cecede2c7aca613395a09e4c0e1dfe11edc",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"account",
+								"verify",
+								"33",
+								"9088b078fa321400d9c6f354ff178e4ff035e629"
+							],
+							"query": [
+								{
+									"key": "expires",
+									"value": "1737043228"
+								},
+								{
+									"key": "signature",
+									"value": "5acf32d648ee38856c7a2058b93e6cecede2c7aca613395a09e4c0e1dfe11edc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Resend Email Verification Account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"this@sal.ma\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/account/resend-verification",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"account",
+								"resend-verification"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password",
 					"event": [
 						{
 							"listen": "test",
@@ -154,7 +235,7 @@
 					"response": []
 				},
 				{
-					"name": "Update Password",
+					"name": "Reset Password",
 					"event": [
 						{
 							"listen": "test",
@@ -172,7 +253,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"new_password\": \"thisis5alma\"\r\n}",
+							"raw": "{\r\n    \"token\": \"08d5c92163fb4b0ef2e481d2adbe8ec254e45f0a89e3806db8e315699e605ec9\",\r\n    \"email\": \"this@sal.ma\",\r\n    \"password\": \"thisis5alma\",\r\n    \"password_confirmation\": \"thisis5alma\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -180,12 +261,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{TODOLI_URL}}/password",
+							"raw": "{{TODOLI_URL}}/reset-password",
 							"host": [
 								"{{TODOLI_URL}}"
 							],
 							"path": [
-								"password"
+								"reset-password"
 							]
 						}
 					},
@@ -252,7 +333,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"new_password\": \"thisis5alma\"\r\n}",
+							"raw": "{\r\n    \"current_password\": \"=letMe1n\",\r\n    \"new_password\": \"=letMe1n2\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -320,29 +401,28 @@
 							"formdata": [
 								{
 									"key": "username",
-									"value": "Salma",
+									"value": "O_TESLAINC",
 									"type": "text"
 								},
 								{
 									"key": "email",
-									"value": "this@sal.ma",
+									"value": "owner@tesla.inc",
 									"type": "text"
 								},
 								{
 									"key": "first_name",
-									"value": "Sal",
+									"value": "Owner",
 									"type": "text"
 								},
 								{
 									"key": "last_name",
-									"value": "Ma",
+									"value": "Tesla",
 									"type": "text"
 								},
 								{
 									"key": "image",
 									"type": "file",
-									"src": [],
-									"disabled": true
+									"src": "/C:/Users/andri/OneDrive/Documents/samples/sample_photo.png"
 								}
 							]
 						},
@@ -555,6 +635,199 @@
 			]
 		},
 		{
+			"name": "Project Category",
+			"item": [
+				{
+					"name": "Paginated List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/project-categories",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"project-categories"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "xyz",
+									"disabled": true
+								},
+								{
+									"key": "filters",
+									"value": "id:1",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "100",
+									"disabled": true
+								},
+								{
+									"key": "sort_field",
+									"value": "name",
+									"disabled": true
+								},
+								{
+									"key": "sort_direction",
+									"value": "asc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/project-categories/1",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"project-categories",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Important\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/project-categories",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"project-categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Very Important\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TODOLI_URL}}/project-categories/1",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"project-categories",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/project-categories/1",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"project-categories",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Project",
 			"item": [
 				{
@@ -576,15 +849,47 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{TODOLI_URL}}/projects/34/members/users",
+									"raw": "{{TODOLI_URL}}/projects/50/members/users",
 									"host": [
 										"{{TODOLI_URL}}"
 									],
 									"path": [
 										"projects",
-										"34",
+										"50",
 										"members",
 										"users"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "member2@tsmc.tw",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "per_page",
+											"value": "100",
+											"disabled": true
+										},
+										{
+											"key": "sort_field",
+											"value": "name",
+											"disabled": true
+										},
+										{
+											"key": "sort_direction",
+											"value": "asc",
+											"disabled": true
+										},
+										{
+											"key": "filters",
+											"value": "is_member:false",
+											"disabled": true
+										}
 									]
 								}
 							},
@@ -841,13 +1146,39 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"A\",\r\n    \"description\": null,\r\n    \"user_ids\": [\r\n        2,\r\n        5\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Project Tesla 1",
+									"type": "text"
+								},
+								{
+									"key": "category_id",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "user_ids[]",
+									"value": "44",
+									"type": "text"
+								},
+								{
+									"key": "user_ids[]",
+									"value": "45",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/andri/OneDrive/Documents/samples/sample_photo.png"
 								}
-							}
+							]
 						},
 						"url": {
 							"raw": "{{TODOLI_URL}}/projects",
@@ -874,25 +1205,51 @@
 								}
 							]
 						},
-						"method": "PATCH",
+						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"B\",\r\n    \"description\": null,\r\n    \"user_ids\": [\r\n        2\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Project Tesla 1",
+									"type": "text"
+								},
+								{
+									"key": "category_id",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "user_ids[]",
+									"value": "44",
+									"type": "text"
+								},
+								{
+									"key": "user_ids[]",
+									"value": "45",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/andri/OneDrive/Documents/samples/sample_photo2.png"
 								}
-							}
+							]
 						},
 						"url": {
-							"raw": "{{TODOLI_URL}}/projects/34",
+							"raw": "{{TODOLI_URL}}/projects/50",
 							"host": [
 								"{{TODOLI_URL}}"
 							],
 							"path": [
 								"projects",
-								"34"
+								"50"
 							]
 						}
 					},
@@ -925,6 +1282,64 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Join By Short Hash",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/projects/74f1ec09/join",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"projects",
+								"74f1ec09",
+								"join"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Leave",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/projects/50/leave",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"projects",
+								"50",
+								"leave"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -950,15 +1365,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{TODOLI_URL}}/projects/34/tasks/1/comments",
+									"raw": "{{TODOLI_URL}}/projects/50/tasks/2/comments",
 									"host": [
 										"{{TODOLI_URL}}"
 									],
 									"path": [
 										"projects",
-										"34",
+										"50",
 										"tasks",
-										"1",
+										"2",
 										"comments"
 									],
 									"query": [
@@ -1013,17 +1428,17 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{TODOLI_URL}}/projects/34/tasks/1/comments/3",
+									"raw": "{{TODOLI_URL}}/projects/50/tasks/2/comments/4",
 									"host": [
 										"{{TODOLI_URL}}"
 									],
 									"path": [
 										"projects",
-										"34",
+										"50",
 										"tasks",
-										"1",
+										"2",
 										"comments",
-										"3"
+										"4"
 									]
 								}
 							},
@@ -1054,15 +1469,15 @@
 									}
 								},
 								"url": {
-									"raw": "{{TODOLI_URL}}/projects/34/tasks/1/comments",
+									"raw": "{{TODOLI_URL}}/projects/50/tasks/2/comments",
 									"host": [
 										"{{TODOLI_URL}}"
 									],
 									"path": [
 										"projects",
-										"34",
+										"50",
 										"tasks",
-										"1",
+										"2",
 										"comments"
 									]
 								}
@@ -1094,17 +1509,17 @@
 									}
 								},
 								"url": {
-									"raw": "{{TODOLI_URL}}/projects/34/tasks/1/comments/3",
+									"raw": "{{TODOLI_URL}}/projects/50/tasks/2/comments/4",
 									"host": [
 										"{{TODOLI_URL}}"
 									],
 									"path": [
 										"projects",
-										"34",
+										"50",
 										"tasks",
-										"1",
+										"2",
 										"comments",
-										"3"
+										"4"
 									]
 								}
 							},
@@ -1126,17 +1541,17 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{TODOLI_URL}}/projects/34/tasks/1/comments/3",
+									"raw": "{{TODOLI_URL}}/projects/50/tasks/2/comments/4",
 									"host": [
 										"{{TODOLI_URL}}"
 									],
 									"path": [
 										"projects",
-										"34",
+										"50",
 										"tasks",
-										"1",
+										"2",
 										"comments",
-										"3"
+										"4"
 									]
 								}
 							},
@@ -1160,19 +1575,20 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{TODOLI_URL}}/projects/34/tasks?search=a",
+							"raw": "{{TODOLI_URL}}/projects/50/tasks",
 							"host": [
 								"{{TODOLI_URL}}"
 							],
 							"path": [
 								"projects",
-								"34",
+								"50",
 								"tasks"
 							],
 							"query": [
 								{
 									"key": "search",
-									"value": "a"
+									"value": "a",
+									"disabled": true
 								},
 								{
 									"key": "filters",
@@ -1220,15 +1636,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{TODOLI_URL}}/projects/34/tasks/1",
+							"raw": "{{TODOLI_URL}}/projects/50/tasks/2",
 							"host": [
 								"{{TODOLI_URL}}"
 							],
 							"path": [
 								"projects",
-								"34",
+								"50",
 								"tasks",
-								"1"
+								"2"
 							]
 						}
 					},
@@ -1254,7 +1670,7 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "A",
+									"value": "Task 1",
 									"type": "text"
 								},
 								{
@@ -1264,42 +1680,45 @@
 								},
 								{
 									"key": "description",
-									"value": "A",
+									"value": "This is task 1",
 									"type": "text"
 								},
 								{
 									"key": "objective",
-									"value": "null",
+									"value": "",
 									"type": "text",
 									"disabled": true
 								},
 								{
 									"key": "additional_notes",
-									"value": "null",
+									"value": "",
 									"type": "text",
 									"disabled": true
 								},
 								{
 									"key": "due_date",
-									"value": "2025-01-01 20:20",
+									"value": "2025-01-24 20:20",
 									"type": "text"
 								},
 								{
-									"key": "images",
+									"key": "images[]",
 									"type": "file",
-									"src": "/C:/Users/andri/OneDrive/Documents/samples/sample_photo.png",
-									"disabled": true
+									"src": [
+										"/C:/Users/andri/OneDrive/Documents/samples/sample_photo.png",
+										"/C:/Users/andri/OneDrive/Documents/samples/sample_photo2.png",
+										"/C:/Users/andri/OneDrive/Documents/samples/sample_photo3.png"
+									]
 								}
 							]
 						},
 						"url": {
-							"raw": "{{TODOLI_URL}}/projects/34/tasks",
+							"raw": "{{TODOLI_URL}}/projects/50/tasks",
 							"host": [
 								"{{TODOLI_URL}}"
 							],
 							"path": [
 								"projects",
-								"34",
+								"50",
 								"tasks"
 							]
 						}
@@ -1326,48 +1745,53 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "A update",
-									"type": "text"
-								},
-								{
-									"key": "priority_id",
-									"value": "1",
+									"value": "Task 1",
 									"type": "text"
 								},
 								{
 									"key": "description",
-									"value": "A",
+									"value": "This is task 1",
 									"type": "text"
 								},
 								{
 									"key": "objective",
-									"value": "null",
+									"value": "",
 									"type": "text",
 									"disabled": true
 								},
 								{
 									"key": "additional_notes",
-									"value": "null",
+									"value": "",
 									"type": "text",
 									"disabled": true
 								},
 								{
 									"key": "due_date",
-									"value": "2025-01-01 20:20",
+									"value": "2025-01-24 20:20",
 									"type": "text"
+								},
+								{
+									"key": "images[]",
+									"type": "file",
+									"src": [
+										"/C:/Users/andri/OneDrive/Documents/samples/sample_photo.png",
+										"/C:/Users/andri/OneDrive/Documents/samples/sample_photo2.png",
+										"/C:/Users/andri/OneDrive/Documents/samples/sample_photo3.png",
+										"/C:/Users/andri/OneDrive/Documents/samples/sample_photo4.png"
+									]
 								}
 							]
 						},
 						"url": {
-							"raw": "{{TODOLI_URL}}/projects/34/tasks/1",
+							"raw": "{{TODOLI_URL}}/projects/50/tasks/2",
 							"host": [
 								"{{TODOLI_URL}}"
 							],
 							"path": [
 								"projects",
-								"34",
+								"50",
 								"tasks",
-								"1"
+								"2"
 							]
 						}
 					},
@@ -1389,15 +1813,15 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{TODOLI_URL}}/projects/1/tasks/1",
+							"raw": "{{TODOLI_URL}}/projects/50/tasks/5",
 							"host": [
 								"{{TODOLI_URL}}"
 							],
 							"path": [
 								"projects",
-								"1",
+								"50",
 								"tasks",
-								"1"
+								"5"
 							]
 						}
 					},
@@ -1420,7 +1844,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": 2\r\n}",
+							"raw": "{\r\n    \"user_id\": 45\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1428,15 +1852,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{TODOLI_URL}}/projects/34/tasks/1/assign-user",
+							"raw": "{{TODOLI_URL}}/projects/50/tasks/2/assign-user",
 							"host": [
 								"{{TODOLI_URL}}"
 							],
 							"path": [
 								"projects",
-								"34",
+								"50",
 								"tasks",
-								"1",
+								"2",
 								"assign-user"
 							]
 						}
@@ -1468,15 +1892,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{TODOLI_URL}}/projects/34/tasks/1/set-status",
+							"raw": "{{TODOLI_URL}}/projects/50/tasks/2/set-status",
 							"host": [
 								"{{TODOLI_URL}}"
 							],
 							"path": [
 								"projects",
-								"34",
+								"50",
 								"tasks",
-								"1",
+								"2",
 								"set-status"
 							]
 						}
@@ -1508,15 +1932,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{TODOLI_URL}}/projects/34/tasks/1/set-priority",
+							"raw": "{{TODOLI_URL}}/projects/50/tasks/2/set-priority",
 							"host": [
 								"{{TODOLI_URL}}"
 							],
 							"path": [
 								"projects",
-								"34",
+								"50",
 								"tasks",
-								"1",
+								"2",
 								"set-priority"
 							]
 						}
@@ -1963,8 +2387,80 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "User Activity Set Read",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TODOLI_AUTH_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{TODOLI_URL}}/activities/1/user/set-read",
+							"host": [
+								"{{TODOLI_URL}}"
+							],
+							"path": [
+								"activities",
+								"1",
+								"user",
+								"set-read"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "xyz",
+									"disabled": true
+								},
+								{
+									"key": "filters",
+									"value": "id:1",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
+		},
+		{
+			"name": "Ping",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{TODOLI_URL}}/ping",
+					"host": [
+						"{{TODOLI_URL}}"
+					],
+					"path": [
+						"ping"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

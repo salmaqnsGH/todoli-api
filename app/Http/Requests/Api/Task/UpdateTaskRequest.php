@@ -23,12 +23,11 @@ class UpdateTaskRequest extends BaseRequest
     {
         return [
             'name' => 'sometimes|string|max:255',
-            'priority_id' => 'sometimes|integer|exists:task_priorities,id',
             'description' => 'sometimes|string|max:255',
             'objective' => 'nullable|string|max:255',
             'additional_notes' => 'nullable|string|max:255',
             'due_date' => 'sometimes|date',
-            'images' => 'sometimes|array',
+            'images' => 'sometimes',
             'images.*' => 'image|mimes:jpeg,png,jpg|max:10240',  // max 10MB per file (10240KB)
         ];
     }

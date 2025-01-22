@@ -2,6 +2,7 @@
 
 namespace App\Services\Api\Task;
 
+use App\Constants\Permission;
 use App\Constants\Value;
 use App\Http\Requests\Api\GetPaginatedListRequest;
 use App\Http\Requests\Api\Task\AssignTaskUserRequest;
@@ -13,15 +14,30 @@ use App\Http\Requests\AppRequest;
 use App\Models\Task;
 use App\Services\PaginationService;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Auth;
 
 class TaskService extends PaginationService
 {
+    protected function getBaseQuery(): Builder
+    {
+        /** @var \Illuminate\Contracts\Auth\Access\Authorizable */
+        $currentUser = Auth::user();
+
+        return Task::with(['project', 'priority', 'status', 'images'])
+            ->whereHas('project.all_members', function ($query) use ($currentUser) {
+                $query->where('user_id', $currentUser->id);
+            })
+            ->without('project');  // This removes the relationship from loading;
+    }
+
     protected function getPaginationBaseQuery(GetPaginatedListRequest $request): Builder
     {
         $projectId = $request->getProjectId();
 
-        return Task::where('project_id', $projectId)
-            ->select('id', 'name', 'objective', 'description', 'additional_notes', 'due_date');
+        return $this->getBaseQuery()
+            ->where('project_id', $projectId)
+            ->select('id', 'project_id', 'user_id', 'status_id', 'priority_id', 'name', 'objective', 'description', 'additional_notes', 'due_date');
     }
 
     protected function getPaginationAllowedSortFields(): array
@@ -71,7 +87,8 @@ class TaskService extends PaginationService
 
     public function getDetail(AppRequest $request)
     {
-        return Task::where('project_id', $request->getProjectId())
+        return $this->getBaseQuery()
+            ->where('project_id', $request->getProjectId())
             ->where('id', $request->getTaskId())
             ->firstOrFail();
     }
@@ -88,7 +105,8 @@ class TaskService extends PaginationService
 
     public function update(UpdateTaskRequest $request)
     {
-        $task = Task::where('project_id', $request->getProjectId())
+        $task = $this->getBaseQuery()
+            ->where('project_id', $request->getProjectId())
             ->where('id', $request->getTaskId())
             ->firstOrFail();
 
@@ -99,7 +117,8 @@ class TaskService extends PaginationService
 
     public function softDelete(AppRequest $request)
     {
-        $task = Task::where('project_id', $request->getProjectId())
+        $task = $this->getBaseQuery()
+            ->where('project_id', $request->getProjectId())
             ->where('id', $request->getTaskId())
             ->firstOrFail();
 
@@ -113,9 +132,17 @@ class TaskService extends PaginationService
         $validatedRequest = $request->validated();
         $userId = $validatedRequest['user_id'];
 
-        $task = Task::where('project_id', $request->getProjectId())
+        $task = $this->getBaseQuery()
+            ->where('project_id', $request->getProjectId())
             ->where('id', $request->getTaskId())
             ->firstOrFail();
+
+        $members = $task->project->all_members->pluck('id')->toArray();
+        if (is_not(in_array($userId, $members))) {
+            $response = jsonresNotFound($request, 'User not found');
+
+            throw new HttpResponseException($response);
+        }
 
         $task->update(['user_id' => $userId]);
 
@@ -127,9 +154,18 @@ class TaskService extends PaginationService
         $validatedRequest = $request->validated();
         $statusId = $validatedRequest['status_id'];
 
-        $task = Task::where('project_id', $request->getProjectId())
+        $task = $this->getBaseQuery()
+            ->where('project_id', $request->getProjectId())
             ->where('id', $request->getTaskId())
             ->firstOrFail();
+
+        /** @var \Illuminate\Contracts\Auth\Access\Authorizable */
+        $currentUser = Auth::user();
+        if (is_not($currentUser->can(pn(Permission::TASK_STATUS_SET_OTHER))) && is_not($currentUser->id === $task->user_id)) {
+            $response = jsonresForbidden($request, 'Forbidden user is not allowed here');
+
+            throw new HttpResponseException($response);
+        }
 
         $task->update(['status_id' => $statusId]);
 
@@ -141,7 +177,8 @@ class TaskService extends PaginationService
         $validatedRequest = $request->validated();
         $priorityId = $validatedRequest['priority_id'];
 
-        $task = Task::where('project_id', $request->getProjectId())
+        $task = $this->getBaseQuery()
+            ->where('project_id', $request->getProjectId())
             ->where('id', $request->getTaskId())
             ->firstOrFail();
 

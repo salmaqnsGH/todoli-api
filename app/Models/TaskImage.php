@@ -7,13 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @mixin Builder
  *
  * @property int $id
  * @property int $task_id
- * @property string $image
+ * @property string|null $image
+ * @property string|null $image_url
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon|null $deleted_at
@@ -37,8 +39,16 @@ class TaskImage extends Model
      * @var list<string>
      */
     protected $hidden = [
+        'image',
         'deleted_at',
     ];
+
+    /**
+     * The attributes that are appended to the result.
+     *
+     * @var list<string>
+     */
+    protected $appends = ['image_url'];
 
     public function task(): BelongsTo
     {
@@ -48,5 +58,15 @@ class TaskImage extends Model
     public function activities(): MorphMany
     {
         return $this->morphMany(Activity::class, 'model');
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        /** @var \Illuminate\Filesystem\FilesystemAdapter */
+        $disk = Storage::disk('public');
+
+        return $this->image
+            ? $disk->url($this->image)
+            : null;
     }
 }

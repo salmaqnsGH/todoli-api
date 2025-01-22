@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Task;
 
+use App\Constants\ImageStorageFolder;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\GetPaginatedListRequest;
 use App\Http\Requests\Api\Task\AssignTaskUserRequest;
@@ -10,12 +11,15 @@ use App\Http\Requests\Api\Task\SetTaskPriorityRequest;
 use App\Http\Requests\Api\Task\SetTaskStatusRequest;
 use App\Http\Requests\Api\Task\UpdateTaskRequest;
 use App\Http\Requests\AppRequest;
+use App\Services\Api\ImageService;
 use App\Services\Api\Task\TaskService;
+use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
     public function __construct(
         protected TaskService $taskService,
+        protected ImageService $imageService,
     ) {}
 
     public function getPaginatedList(GetPaginatedListRequest $request)
@@ -34,16 +38,82 @@ class TaskController extends Controller
 
     public function create(CreateTaskRequest $request)
     {
-        $result = $this->taskService->create($request);
+        try {
+            DB::beginTransaction();
 
-        return jsonresCreated($request, 'Success create data', $result);
+            $task = $this->taskService->create($request);
+
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $imagePath = $this->imageService->store(
+                        $image,
+                        ImageStorageFolder::TASK,
+                        $task->id
+                    );
+
+                    // Create TaskImage record
+                    $task->images()->create([
+                        'image' => $imagePath,
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return jsonresCreated($request, 'Success create data', $task);
+        } catch (\Exception $e) {
+            if (isset($task)) {
+                foreach ($task->images as $taskImage) {
+                    $this->imageService->delete($taskImage->image);
+                }
+            }
+
+            DB::rollback();
+            throw $e;
+        }
     }
 
     public function update(UpdateTaskRequest $request)
     {
-        $result = $this->taskService->update($request);
+        try {
+            DB::beginTransaction();
 
-        return jsonresSuccess($request, 'Success update data', $result);
+            $task = $this->taskService->update($request);
+
+            if ($request->hasFile('images')) {
+                // Store old images for cleanup
+                $oldImages = $task->images()->get();
+
+                // Delete old image records
+                $task->images()->delete();
+
+                // Upload and create new images
+                foreach ($request->file('images') as $image) {
+                    $imagePath = $this->imageService->store(
+                        $image,
+                        ImageStorageFolder::TASK,
+                        $task->id
+                    );
+
+                    $task->images()->create([
+                        'image' => $imagePath,
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return jsonresSuccess($request, 'Success update data', $task);
+        } catch (\Exception $e) {
+            if (isset($task)) {
+                foreach ($task->images as $taskImage) {
+                    $this->imageService->delete($taskImage->image);
+                }
+            }
+
+            DB::rollback();
+            throw $e;
+        }
     }
 
     public function softDelete(AppRequest $request)

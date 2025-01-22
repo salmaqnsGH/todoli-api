@@ -14,9 +14,21 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskCommentService extends PaginationService
 {
+    protected function getBaseQuery(): Builder
+    {
+        /** @var \Illuminate\Contracts\Auth\Access\Authorizable */
+        $currentUser = Auth::user();
+
+        return TaskComment::with(['task', 'user'])
+            ->whereHas('task.project.all_members', function ($query) use ($currentUser) {
+                $query->where('user_id', $currentUser->id);
+            })
+            ->without('task');  // This removes the relationship from loading;
+    }
+
     protected function getPaginationBaseQuery(GetPaginatedListRequest $request): Builder
     {
-        return TaskComment::select('id', 'content');
+        return $this->getBaseQuery()->select('id', 'user_id', 'content');
     }
 
     protected function getPaginationAllowedSortFields(): array
@@ -53,7 +65,7 @@ class TaskCommentService extends PaginationService
 
     public function getDetail(AppRequest $request)
     {
-        return TaskComment::where('task_id', $request->getTaskId())
+        return $this->getBaseQuery()->where('task_id', $request->getTaskId())
             ->where('id', $request->getTaskCommentId())
             ->firstOrFail();
     }
@@ -72,7 +84,7 @@ class TaskCommentService extends PaginationService
 
     public function update(UpdateTaskCommentRequest $request)
     {
-        $taskComment = TaskComment::where('task_id', $request->getTaskId())
+        $taskComment = $this->getBaseQuery()->where('task_id', $request->getTaskId())
             ->where('id', $request->getTaskCommentId())
             ->firstOrFail();
 
@@ -83,7 +95,7 @@ class TaskCommentService extends PaginationService
 
     public function softDelete(AppRequest $request)
     {
-        $taskComment = TaskComment::where('task_id', $request->getTaskId())
+        $taskComment = $this->getBaseQuery()->where('task_id', $request->getTaskId())
             ->where('id', $request->getTaskCommentId())
             ->firstOrFail();
 
