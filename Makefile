@@ -92,3 +92,7 @@ queue-work:
 
 queue-flush:
 	php artisan queue:clear && php artisan queue:flush
+
+husky-init:
+	chmod +x .husky/*
+	chmod +x .husky/_/*

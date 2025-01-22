@@ -1,0 +1,1 @@
+which make > /dev/null && make fix || ./vendor/bin/pint
