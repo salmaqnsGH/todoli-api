@@ -33,7 +33,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('/account/resend-verification', [AuthController::class, 'resendEmailVerificationAccount'])
         ->middleware('throttle:6,1');
 
-    Route::middleware(['user_verified', 'auth:sanctum'])->group(function () {
+    Route::middleware(['extend_token', 'user_verified', 'auth:sanctum'])->group(function () {
         Route::post('/signout', [AuthController::class, 'logout']);
 
         Route::group(['prefix' => 'users'], function () {

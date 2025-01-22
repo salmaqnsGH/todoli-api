@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureEmailIsVerifiedMiddleware;
+use App\Http\Middleware\ExtendTokenExpirationMiddleware;
 use App\Http\Middleware\PermissionMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -17,6 +18,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'permission' => PermissionMiddleware::class,
             'user_verified' => EnsureEmailIsVerifiedMiddleware::class,
+            'extend_token' => ExtendTokenExpirationMiddleware::class,
+
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
