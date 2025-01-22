@@ -1,1 +1,3 @@
 which make > /dev/null && make fix || ./vendor/bin/pint
+
+git add .

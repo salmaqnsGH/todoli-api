@@ -22,9 +22,8 @@ class UpdatePasswordRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'token' => 'sometimes|string',
-            'current_password' => 'sometimes|string',
-            'new_password' => 'required|string',
+            'current_password' => 'required|string',
+            'new_password' => 'required|min:8|string',
         ];
     }
 }

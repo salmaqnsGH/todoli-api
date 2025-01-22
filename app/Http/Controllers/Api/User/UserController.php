@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\User\UpdatePasswordRequest;
 use App\Http\Requests\Api\User\UpdateProfileRequest;
+use App\Http\Requests\AppRequest;
 use App\Services\Api\User\UserService;
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -14,27 +14,24 @@ class UserController extends Controller
         protected UserService $userService,
     ) {}
 
-    public function getProfile(Request $request)
+    public function getProfile(AppRequest $request)
     {
-        // TODO implement this
-        $result = $this->userService->getProfile($request);
+        $result = $this->userService->getProfile();
 
-        return jsonresSuccess($request, 'OK', []);
+        return jsonresSuccess($request, 'Success get data', $result);
     }
 
     public function updateProfile(UpdateProfileRequest $request)
     {
-        // TODO implement this
-        $result = $this->userService->updateProfile($request);
+        $user = $this->userService->updateProfile($request);
 
-        return jsonresSuccess($request, 'OK', []);
+        return jsonresSuccess($request, 'Success update data', $user);
     }
 
     public function updatePassword(UpdatePasswordRequest $request)
     {
-        // TODO implement this
         $result = $this->userService->updatePassword($request);
 
-        return jsonresSuccess($request, 'OK', []);
+        return jsonresSuccess($request, 'Success update password', $result);
     }
 }

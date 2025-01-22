@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\User;
 
 use App\Http\Requests\Api\BaseRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateProfileRequest extends BaseRequest
 {
@@ -22,11 +23,35 @@ class UpdateProfileRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'username' => 'sometimes|string|max:255|unique:users',
-            'email' => 'sometimes|string|email|max:255|unique:users',
-            'first_name' => 'sometimes|string|max:255',
-            'last_name' => 'sometimes|string|max:255',
-            'image' => 'sometimes|nullable|string|max:255',
+            'username' => [
+                'sometimes',
+                'string',
+                'max:255',
+                Rule::unique('users', 'username')->ignore(auth()->id()),
+            ],
+            'email' => [
+                'sometimes',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore(auth()->id()),
+            ],
+            'first_name' => [
+                'sometimes',
+                'string',
+                'max:255',
+            ],
+            'last_name' => [
+                'sometimes',
+                'string',
+                'max:255',
+            ],
+            'image' => [
+                'nullable',
+                'image',
+                'mimes:jpeg,png,jpg',
+                'max:10240',
+            ],
         ];
     }
 }
