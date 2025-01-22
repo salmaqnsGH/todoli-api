@@ -20,6 +20,16 @@ abstract class BaseRequest extends FormRequest
         return $this->route('id');
     }
 
+    public function getProjectId()
+    {
+        return $this->route('projectId');
+    }
+
+    public function getProjectShortHash()
+    {
+        return $this->route('shortHash');
+    }
+
     public function getProjectUserId()
     {
         return $this->route('userId');

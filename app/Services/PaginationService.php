@@ -70,14 +70,18 @@ abstract class PaginationService
         return $query->paginate($perPage);
     }
 
-    protected function parseFilters(string $filters): array
+    protected function parseFilters(?string $filters): array
     {
+        if (empty($filters)) {
+            return [];
+        }
+
         $filters = explode(',', $filters);
         $parsedFilters = [];
 
         foreach ($filters as $filter) {
             [$key, $value] = explode(':', $filter);
-            $parsedFilters[$key] = $value;
+            $parsedFilters[$key] = $value === 'true' ? true : ($value === 'false' ? false : $value);
         }
 
         return $parsedFilters;

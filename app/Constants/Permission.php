@@ -126,6 +126,16 @@ class Permission
 
     const PROJECT_USER_PERMISSION_EDIT = 61;
 
+    const PROJECT_CATEGORY_VIEW = 62;
+
+    const PROJECT_CATEGORY_ADD = 63;
+
+    const PROJECT_CATEGORY_EDIT_OWN = 64;
+
+    const PROJECT_CATEGORY_DELETE_OWN = 65;
+
+    const PROJECT_MEMBER_JOIN_OWN = 66;
+
     private static array $names = [
         self::USER_VIEW => 'View Users',
         self::USER_VIEW_OWN => 'View Own User',
@@ -180,6 +190,7 @@ class Permission
         self::TASK_PRIORITY_SET_OTHER => 'Set Other Task Priority',
         self::TASK_STATUS_SET_OTHER => 'Set Other Task Status',
         self::USER_VERIFY => 'Verify User',
+        self::PROJECT_MEMBER_JOIN_OWN => 'Join Project',
         self::PROJECT_MEMBER_LEAVE_OWN => 'Leave Own Project',
         self::ACTIVITY_VIEW => 'View Activities',
         self::ACTIVITY_VIEW_OWN => 'View Own Activities',
@@ -188,6 +199,10 @@ class Permission
         self::TASK_COMMENT_NOTIFY_OWN => 'Get Own Task Comment Notifications',
         self::PROJECT_USER_PERMISSION_VIEW_OWN => 'View User Project Permissions',
         self::PROJECT_USER_PERMISSION_EDIT => 'Edit User Project Permission',
+        self::PROJECT_CATEGORY_VIEW => 'View Project Categories',
+        self::PROJECT_CATEGORY_ADD => 'Add Project Category',
+        self::PROJECT_CATEGORY_EDIT_OWN => 'Edit Own Project Category',
+        self::PROJECT_CATEGORY_DELETE_OWN => 'Delete Own Project Category',
     ];
 
     public static function getName(int $permission): string
@@ -216,7 +231,6 @@ class Permission
             self::PROJECT_ADD,
             self::PROJECT_EDIT_OWN,
             self::PROJECT_DELETE_OWN,
-            self::PROJECT_MEMBER_VIEW,
             self::PROJECT_MEMBER_ADD,
             self::PROJECT_MEMBER_EDIT_OWN,
             self::PROJECT_MEMBER_REMOVE_OWN,
@@ -234,16 +248,8 @@ class Permission
             self::TASK_COMMENT_EDIT_OWN,
             self::TASK_COMMENT_DELETE_OWN,
             self::TASK_COMMENT_NOTIFY_OWN,
-            self::TASK_PRIORITY_VIEW,
-            self::TASK_PRIORITY_ADD,
-            self::TASK_PRIORITY_EDIT_OWN,
-            self::TASK_PRIORITY_DELETE_OWN,
             self::TASK_PRIORITY_SET_OWN,
             self::TASK_PRIORITY_SET_OTHER,
-            self::TASK_STATUS_VIEW,
-            self::TASK_STATUS_ADD,
-            self::TASK_STATUS_EDIT_OWN,
-            self::TASK_STATUS_DELETE_OWN,
             self::TASK_STATUS_SET_OWN,
             self::TASK_STATUS_SET_OTHER,
             self::ACTIVITY_VIEW,
@@ -258,7 +264,13 @@ class Permission
         return [
             self::ORGANIZATION_VIEW_OWN,
             self::PROJECT_VIEW_OWN,
+            self::PROJECT_CATEGORY_VIEW,
+            self::PROJECT_CATEGORY_ADD,
+            self::PROJECT_CATEGORY_EDIT_OWN,
+            self::PROJECT_CATEGORY_DELETE_OWN,
+            self::PROJECT_ADD,
             self::PROJECT_MEMBER_VIEW,
+            self::PROJECT_MEMBER_JOIN_OWN,
             self::PROJECT_MEMBER_LEAVE_OWN,
             self::PROJECT_NOTIFY_OWN,
             self::TASK_VIEW,
@@ -269,6 +281,14 @@ class Permission
             self::TASK_COMMENT_EDIT_OWN,
             self::TASK_COMMENT_DELETE_OWN,
             self::TASK_COMMENT_NOTIFY_OWN,
+            self::TASK_PRIORITY_VIEW,
+            self::TASK_PRIORITY_ADD,
+            self::TASK_PRIORITY_EDIT_OWN,
+            self::TASK_PRIORITY_DELETE_OWN,
+            self::TASK_STATUS_VIEW,
+            self::TASK_STATUS_ADD,
+            self::TASK_STATUS_EDIT_OWN,
+            self::TASK_STATUS_DELETE_OWN,
             self::TASK_STATUS_SET_OWN,
             self::ACTIVITY_VIEW_OWN,
         ];

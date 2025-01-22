@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Project;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\GetPaginatedListRequest;
 use App\Http\Requests\Api\Project\AddProjectMemberRequest;
 use App\Http\Requests\AppRequest;
 use App\Services\Api\Project\ProjectMemberService;
@@ -13,10 +14,9 @@ class ProjectMemberController extends Controller
         protected ProjectMemberService $projectMemberService,
     ) {}
 
-    public function getMembers(AppRequest $request)
+    public function getPaginatedList(GetPaginatedListRequest $request)
     {
-        $projectId = $request->getId();
-        $result = $this->projectMemberService->getMembersByProjectId($projectId);
+        $result = $this->projectMemberService->getPaginatedList($request);
 
         return jsonresSuccess($request, 'Success get list data', $result);
     }
@@ -33,5 +33,19 @@ class ProjectMemberController extends Controller
         $result = $this->projectMemberService->softRemove($request);
 
         return jsonresSuccess($request, 'Data is deleted', $result);
+    }
+
+    public function join(AppRequest $request)
+    {
+        $result = $this->projectMemberService->join($request);
+
+        return jsonresSuccess($request, 'Success join', $result);
+    }
+
+    public function leave(AppRequest $request)
+    {
+        $result = $this->projectMemberService->leave($request);
+
+        return jsonresSuccess($request, 'Success leave', $result);
     }
 }

@@ -18,7 +18,7 @@ class TaskService extends PaginationService
 {
     protected function getPaginationBaseQuery(GetPaginatedListRequest $request): Builder
     {
-        $projectId = $request->getId();
+        $projectId = $request->getProjectId();
 
         return Task::where('project_id', $projectId)
             ->select('id', 'name', 'objective', 'description', 'additional_notes', 'due_date');
@@ -71,7 +71,7 @@ class TaskService extends PaginationService
 
     public function getDetail(AppRequest $request)
     {
-        return Task::where('project_id', $request->getId())
+        return Task::where('project_id', $request->getProjectId())
             ->where('id', $request->getTaskId())
             ->firstOrFail();
     }
@@ -80,7 +80,7 @@ class TaskService extends PaginationService
     {
         $validatedRequest = $request->validated();
         $data = $validatedRequest;
-        $projectId = $request->getId();
+        $projectId = $request->getProjectId();
         $data['project_id'] = $projectId;
 
         return Task::create($data);
@@ -88,7 +88,7 @@ class TaskService extends PaginationService
 
     public function update(UpdateTaskRequest $request)
     {
-        $task = Task::where('project_id', $request->getId())
+        $task = Task::where('project_id', $request->getProjectId())
             ->where('id', $request->getTaskId())
             ->firstOrFail();
 
@@ -99,7 +99,7 @@ class TaskService extends PaginationService
 
     public function softDelete(AppRequest $request)
     {
-        $task = Task::where('project_id', $request->getId())
+        $task = Task::where('project_id', $request->getProjectId())
             ->where('id', $request->getTaskId())
             ->firstOrFail();
 
@@ -113,7 +113,7 @@ class TaskService extends PaginationService
         $validatedRequest = $request->validated();
         $userId = $validatedRequest['user_id'];
 
-        $task = Task::where('project_id', $request->getId())
+        $task = Task::where('project_id', $request->getProjectId())
             ->where('id', $request->getTaskId())
             ->firstOrFail();
 
@@ -127,7 +127,7 @@ class TaskService extends PaginationService
         $validatedRequest = $request->validated();
         $statusId = $validatedRequest['status_id'];
 
-        $task = Task::where('project_id', $request->getId())
+        $task = Task::where('project_id', $request->getProjectId())
             ->where('id', $request->getTaskId())
             ->firstOrFail();
 
@@ -141,7 +141,7 @@ class TaskService extends PaginationService
         $validatedRequest = $request->validated();
         $priorityId = $validatedRequest['priority_id'];
 
-        $task = Task::where('project_id', $request->getId())
+        $task = Task::where('project_id', $request->getProjectId())
             ->where('id', $request->getTaskId())
             ->firstOrFail();
 

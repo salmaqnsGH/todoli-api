@@ -70,6 +70,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'remember_token',
         'image',
+        'email_verified_at',
+        'deleted_at',
+        'laravel_through_key',
     ];
 
     /**

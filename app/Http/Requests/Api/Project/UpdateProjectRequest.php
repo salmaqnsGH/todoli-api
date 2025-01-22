@@ -23,9 +23,11 @@ class UpdateProjectRequest extends BaseRequest
     {
         return [
             'name' => 'sometimes|string|max:255',
+            'category_id' => 'nullable|integer|exists:project_categories,id',
             'description' => 'nullable|string|max:255',
             'user_ids' => 'sometimes|array',
             'user_ids.*' => 'exists:users,id|distinct',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:10240',  // max 10MB per file (10240KB)
         ];
     }
 }

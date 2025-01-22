@@ -31,6 +31,15 @@ class TaskImage extends Model
      */
     protected $fillable = ['image'];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var list<string>
+     */
+    protected $hidden = [
+        'deleted_at',
+    ];
+
     public function task(): BelongsTo
     {
         return $this->belongsTo(Task::class);

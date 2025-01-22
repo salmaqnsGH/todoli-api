@@ -64,6 +64,18 @@ class Task extends Model
         'due_date' => 'datetime',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($project) {
+            // Soft delete related models
+            $project->comments()->delete();
+            $project->images()->delete();
+            $project->activities()->delete();
+        });
+    }
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
@@ -77,6 +89,11 @@ class Task extends Model
     public function status(): BelongsTo
     {
         return $this->belongsTo(TaskStatus::class);
+    }
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(TaskImage::class, 'task_id');
     }
 
     public function comments(): HasMany

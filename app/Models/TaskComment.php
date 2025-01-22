@@ -34,6 +34,15 @@ class TaskComment extends Model
      */
     protected $fillable = ['task_id', 'user_id', 'content'];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var list<string>
+     */
+    protected $hidden = [
+        'deleted_at',
+    ];
+
     public function task(): BelongsTo
     {
         return $this->belongsTo(Task::class);

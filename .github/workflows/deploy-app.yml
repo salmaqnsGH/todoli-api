@@ -116,6 +116,7 @@ jobs:
           cd ${{ vars.APP_DIR }}
           cp .env .env
           php artisan migrate --force
+          php artisan db:seed
           php artisan optimize:clear
           echo ${{ secrets.DO_PASSWORD }} | sudo -S systemctl restart nginx
           echo ${{ secrets.DO_PASSWORD }} | sudo -S systemctl restart php8.2-fpm

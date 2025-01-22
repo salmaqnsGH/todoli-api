@@ -31,6 +31,15 @@ class Organization extends Model
      */
     protected $fillable = ['name'];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var list<string>
+     */
+    protected $hidden = [
+        'deleted_at',
+    ];
+
     public function users(): HasMany
     {
         return $this->hasMany(User::class, 'organization_id');

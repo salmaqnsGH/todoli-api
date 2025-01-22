@@ -28,6 +28,15 @@ class ProjectCategory extends Model
      */
     protected $fillable = ['name'];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var list<string>
+     */
+    protected $hidden = [
+        'deleted_at',
+    ];
+
     public function activities(): MorphMany
     {
         return $this->morphMany(Activity::class, 'model');

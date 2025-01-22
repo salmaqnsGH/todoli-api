@@ -3,8 +3,9 @@
 namespace App\Http\Requests\Api\Project;
 
 use App\Http\Requests\Api\BaseRequest;
+use Illuminate\Validation\Rule;
 
-class CreateProjectRequest extends BaseRequest
+class UpdateProjectCategoryRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +23,12 @@ class CreateProjectRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'category_id' => 'nullable|integer|exists:project_categories,id',
-            'description' => 'nullable|string|max:255',
-            'user_ids' => 'sometimes|array',
-            'user_ids.*' => 'exists:users,id|distinct',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:10240',  // max 10MB per file (10240KB)
+            'name' => [
+                'sometimes',
+                'string',
+                'max:255',
+                Rule::unique('project_categories', 'name')->ignore($this->getId()),
+            ],
         ];
     }
 }

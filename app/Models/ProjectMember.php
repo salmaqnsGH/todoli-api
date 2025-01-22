@@ -36,6 +36,15 @@ class ProjectMember extends Model
      */
     protected $fillable = ['project_id', 'user_id', 'role_id'];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var list<string>
+     */
+    protected $hidden = [
+        'deleted_at',
+    ];
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);

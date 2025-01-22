@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
 
         // For 404 errors
         if ($e instanceof NotFoundHttpException) {
-            return jsonresNotFound($request, 'Data not found');
+            return jsonresNotFound($request, 'Page not found');
         }
 
         // Handle Route Not Found due to unauthorized access

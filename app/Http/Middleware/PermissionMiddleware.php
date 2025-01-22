@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Services\PermissionService;
 use Closure;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,7 +21,7 @@ class PermissionMiddleware
      */
     public function handle(Request $request, Closure $next, string $permissionNames): Response
     {
-        $projectId = $request->route('id');
+        $projectId = $request->route('projectId');
 
         // Split permissions by | if multiple permissions exist
         $permissions = explode('|', $permissionNames);
@@ -36,6 +37,6 @@ class PermissionMiddleware
             }
         }
 
-        return jsonresForbidden($request, 'Forbidden user is not allowed here');
+        throw new AuthorizationException;
     }
 }

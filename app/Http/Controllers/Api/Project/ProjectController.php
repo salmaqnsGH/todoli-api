@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api\Project;
 
+use App\Constants\ImageStorageFolder;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\GetPaginatedListRequest;
 use App\Http\Requests\Api\Project\CreateProjectRequest;
 use App\Http\Requests\Api\Project\UpdateProjectRequest;
 use App\Http\Requests\AppRequest;
+use App\Services\Api\ImageService;
 use App\Services\Api\Project\ProjectMemberService;
 use App\Services\Api\Project\ProjectPermissionService;
 use App\Services\Api\Project\ProjectService;
@@ -19,6 +21,7 @@ class ProjectController extends Controller
         protected ProjectService $projectService,
         protected ProjectMemberService $projectMemberService,
         protected ProjectPermissionService $projectPermissionService,
+        protected ImageService $imageService,
     ) {}
 
     public function getPaginatedList(GetPaginatedListRequest $request)
@@ -52,15 +55,21 @@ class ProjectController extends Controller
             );
             $this->projectPermissionService->addDefaultRoleOwnerPermissions($projectId, $currentUserId);
 
-            $responseData = [
-                'project' => $project,
-                'members' => $members,
-            ];
+            if ($request->hasFile('image')) {
+                $projectImagePath = $this->imageService->store($request->file('image'), ImageStorageFolder::PROJECT, $project->id);
+                $project->image = $projectImagePath;
+                $project->save();
+            }
+
+            $project['all_members'] = $members;
 
             DB::commit();
 
-            return jsonresCreated($request, 'Success create data', $responseData);
+            return jsonresCreated($request, 'Success create data', $project);
         } catch (\Exception $e) {
+            if ($projectImagePath) {
+                $this->imageService->delete($projectImagePath);
+            }
             DB::rollback();
             throw $e;
         }
@@ -68,6 +77,9 @@ class ProjectController extends Controller
 
     public function update(UpdateProjectRequest $request)
     {
+        $projectImagePath = null; // Initialize for potential cleanup
+        $oldProjectImagePath = null; // Store old image path for cleanup
+
         try {
             DB::beginTransaction();
 
@@ -82,17 +94,39 @@ class ProjectController extends Controller
                 $members = $this->projectMemberService->getMembersByProjectId($projectId);
             }
 
-            $responseData = [
-                'project' => $project,
-                'members' => $members,
-            ];
+            if ($request->hasFile('image')) {
+                // Store old image path for deletion
+                $oldProjectImagePath = $project->image;
+
+                $projectImagePath = $this->imageService->store(
+                    $request->file('image'),
+                    ImageStorageFolder::PROJECT,
+                    $project->id
+                );
+                $project->image = $projectImagePath;
+                $project->save();
+
+                // Don't need to remove old image if filename is exactly the same
+                if ($oldProjectImagePath == $projectImagePath) {
+                    $oldProjectImagePath = null;
+                }
+            }
+
+            $project['members'] = $members;
 
             DB::commit();
 
-            return jsonresSuccess($request, 'Success update data', $responseData);
+            return jsonresSuccess($request, 'Success update data', $project);
         } catch (\Exception $e) {
+            if ($projectImagePath) {
+                $this->imageService->delete($projectImagePath);
+            }
             DB::rollback();
             throw $e;
+        } finally {
+            if ($oldProjectImagePath) {
+                $this->imageService->delete($oldProjectImagePath);
+            }
         }
     }
 

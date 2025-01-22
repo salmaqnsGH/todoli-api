@@ -28,7 +28,7 @@ class CustomResetPassword extends ResetPassword implements ShouldQueue
             ->subject('Reset Password')
             ->markdown('emails.auth.reset-password', [
                 'url' => $url,
-                'user' => $notifiable
+                'user' => $notifiable,
             ]);
     }
 }

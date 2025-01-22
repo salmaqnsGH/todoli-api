@@ -32,6 +32,15 @@ class TaskPriority extends Model
      */
     protected $fillable = ['name', 'color'];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var list<string>
+     */
+    protected $hidden = [
+        'deleted_at',
+    ];
+
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class, 'priority_id');

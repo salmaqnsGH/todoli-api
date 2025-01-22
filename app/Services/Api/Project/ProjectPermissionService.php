@@ -13,7 +13,7 @@ class ProjectPermissionService
 {
     public function getUserProjectPermissions(AppRequest $request)
     {
-        $projectId = $request->getId();
+        $projectId = $request->getProjectId();
         $userId = $request->getProjectUserId();
 
         $permissions = ProjectPermission::with('permission')

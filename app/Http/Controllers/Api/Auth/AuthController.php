@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Constants\ImageStorageFolder;
 use App\Constants\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Auth\ForgotPasswordRequest;
@@ -14,8 +15,8 @@ use App\Services\Api\Auth\ForgotAccountService;
 use App\Services\Api\Auth\LoginService;
 use App\Services\Api\Auth\LogoutService;
 use App\Services\Api\Auth\RegisterService;
+use App\Services\Api\ImageService;
 use App\Services\Api\Organization\OrganizationService;
-use App\Services\Api\User\UserProfileImageService;
 use App\Services\Api\User\UserService;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Verified;
@@ -31,7 +32,7 @@ class AuthController extends Controller
         protected LogoutService $logoutService,
         protected ForgotAccountService $forgotAccountService,
         protected UserService $userService,
-        protected UserProfileImageService $userProfileImageService,
+        protected ImageService $imageService,
         protected OrganizationService $organizationService,
     ) {}
 
@@ -55,7 +56,7 @@ class AuthController extends Controller
             $this->registerService->assignRole($user, UserRole::USER_MEMBER);
 
             if ($request->hasFile('image')) {
-                $profileImagePath = $this->userProfileImageService->store($request->file('image'));
+                $profileImagePath = $this->imageService->store($request->file('image'), ImageStorageFolder::USER, $user->id);
                 $user->image = $profileImagePath;
                 $user->save();
             }
@@ -71,7 +72,9 @@ class AuthController extends Controller
 
             return jsonresCreated($request, 'Success sign up', $responseData);
         } catch (\Exception $e) {
-            $this->userProfileImageService->delete($profileImagePath);
+            if ($profileImagePath) {
+                $this->imageService->delete($profileImagePath);
+            }
             DB::rollback();
             throw $e;
         }
@@ -149,7 +152,7 @@ class AuthController extends Controller
     {
         $user = $this->userService->getById($request);
 
-        if (!hash_equals(
+        if (! hash_equals(
             (string) $request->route('hash'),
             sha1($user->getEmailForVerification())
         )) {

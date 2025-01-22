@@ -4,6 +4,7 @@ use App\Constants\Permission;
 use App\Http\Controllers\Api\Activity\ActivityController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Organization\OrganizationController;
+use App\Http\Controllers\Api\Project\ProjectCategoryController;
 use App\Http\Controllers\Api\Project\ProjectController;
 use App\Http\Controllers\Api\Project\ProjectMemberController;
 use App\Http\Controllers\Api\Project\ProjectPermissionController;
@@ -16,10 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'v1'], function () {
     Route::get('/ping', function () {
-        return response()->json([
-            'message' => 'pong',
-            'status' => 200
-        ], 200);
+        return jsonresSuccess(null, 'pong!');
     });
 
     Route::post('/signin', [AuthController::class, 'login']);
@@ -52,25 +50,36 @@ Route::group(['prefix' => 'v1'], function () {
             Route::delete('/{id}', [OrganizationController::class, 'softDelete'])->middleware('permission:'.pn(Permission::ORGANIZATION_DELETE_OWN));
         });
 
+        Route::group(['prefix' => 'project-categories'], function () {
+            Route::get('/', [ProjectCategoryController::class, 'getPaginatedList'])->middleware('permission:'.pn(Permission::PROJECT_CATEGORY_VIEW));
+            Route::get('/{id}', [ProjectCategoryController::class, 'getDetail'])->middleware('permission:'.pn(Permission::PROJECT_CATEGORY_VIEW));
+            Route::post('/', [ProjectCategoryController::class, 'create'])->middleware('permission:'.pn(Permission::PROJECT_CATEGORY_ADD));
+            Route::patch('/{id}', [ProjectCategoryController::class, 'update'])->middleware('permission:'.pn(Permission::PROJECT_CATEGORY_EDIT_OWN));
+            Route::delete('/{id}', [ProjectCategoryController::class, 'softDelete'])->middleware('permission:'.pn(Permission::PROJECT_CATEGORY_DELETE_OWN));
+        });
+
         Route::group(['prefix' => 'projects'], function () {
             Route::get('/', [ProjectController::class, 'getPaginatedList'])->middleware('permission:'.pn(Permission::PROJECT_VIEW_OWN));
-            Route::get('/{id}', [ProjectController::class, 'getDetail'])->middleware('permission:'.pn(Permission::PROJECT_VIEW_OWN));
+            Route::get('/{projectId}', [ProjectController::class, 'getDetail'])->middleware('permission:'.pn(Permission::PROJECT_VIEW_OWN));
             Route::post('/', [ProjectController::class, 'create'])->middleware('permission:'.pn(Permission::PROJECT_ADD));
-            Route::patch('/{id}', [ProjectController::class, 'update'])->middleware('permission:'.pn(Permission::PROJECT_EDIT_OWN));
-            Route::delete('/{id}', [ProjectController::class, 'softDelete'])->middleware('permission:'.pn(Permission::PROJECT_DELETE_OWN));
+            Route::post('/{projectId}', [ProjectController::class, 'update'])->middleware('permission:'.pn(Permission::PROJECT_EDIT_OWN));
+            Route::delete('/{projectId}', [ProjectController::class, 'softDelete'])->middleware('permission:'.pn(Permission::PROJECT_DELETE_OWN));
 
-            Route::group(['prefix' => '{id}/members'], function () {
-                Route::get('/users', [ProjectMemberController::class, 'getMembers'])->middleware('permission:'.pn(Permission::PROJECT_MEMBER_VIEW));
+            Route::group(['prefix' => '{projectId}/members'], function () {
+                Route::get('/users', [ProjectMemberController::class, 'getPaginatedList'])->middleware('permission:'.pn(Permission::PROJECT_MEMBER_VIEW));
                 Route::post('/users/', [ProjectMemberController::class, 'add'])->middleware('permission:'.pn(Permission::PROJECT_MEMBER_ADD));
                 Route::delete('/users/{userId}', [ProjectMemberController::class, 'softRemove'])->middleware('permission:'.pn(Permission::PROJECT_MEMBER_REMOVE_OWN));
             });
 
-            Route::group(['prefix' => '{id}/permissions'], function () {
+            Route::group(['prefix' => '{projectId}/permissions'], function () {
                 Route::get('/users/{userId}', [ProjectPermissionController::class, 'getUserProjectPermissions'])->middleware('permission:'.pn(Permission::PROJECT_USER_PERMISSION_VIEW_OWN));
                 Route::patch('/users/{userId}', [ProjectPermissionController::class, 'updateUserProjectPermissions'])->middleware('permission:'.pn(Permission::PROJECT_USER_PERMISSION_EDIT));
             });
 
-            Route::group(['prefix' => '{id}/tasks'], function () {
+            Route::post('/{shortHash}/join', [ProjectMemberController::class, 'join'])->middleware('permission:'.pn(Permission::PROJECT_MEMBER_JOIN_OWN));
+            Route::post('/{projectId}/leave', [ProjectMemberController::class, 'leave'])->middleware('permission:'.pn(Permission::PROJECT_MEMBER_LEAVE_OWN));
+
+            Route::group(['prefix' => '{projectId}/tasks'], function () {
                 Route::get('/', [TaskController::class, 'getPaginatedList'])->middleware('permission:'.pn(Permission::TASK_VIEW_OWN));
                 Route::get('/{taskId}', [TaskController::class, 'getDetail'])->middleware('permission:'.pn(Permission::TASK_VIEW_OWN));
                 Route::post('/', [TaskController::class, 'create'])->middleware('permission:'.pn(Permission::TASK_ADD));
