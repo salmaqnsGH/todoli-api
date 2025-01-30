@@ -106,14 +106,14 @@ trait HasActivity
             $modelName = class_basename($model);
 
             // TODO change to actual emails TO
-            Mail::to('admin@example.com')
-                ->queue(new ActivityLogMail(
-                    $user,
-                    $action,
-                    $changes,
-                    $modelName,
-                    Carbon::now()
-                ));
+            // Mail::to('admin@example.com')
+            //     ->queue(new ActivityLogMail(
+            //         $user,
+            //         $action,
+            //         $changes,
+            //         $modelName,
+            //         Carbon::now()
+            //     ));
         } catch (\Exception $e) {
             Log::error('Failed to send activity log email: '.$e->getMessage());
         }
