@@ -114,7 +114,6 @@ jobs:
         key: ${{ secrets.DO_SSH_KEY }}
         script: |
           cd ${{ vars.APP_DIR }}
-          cp .env .env
           php artisan migrate --force
           php artisan db:seed
           php artisan optimize:clear
