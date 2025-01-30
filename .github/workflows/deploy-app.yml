@@ -120,3 +120,4 @@ jobs:
           php artisan optimize:clear
           echo ${{ secrets.DO_PASSWORD }} | sudo -S systemctl restart nginx
           echo ${{ secrets.DO_PASSWORD }} | sudo -S systemctl restart php8.2-fpm
+          echo ${{ secrets.DO_PASSWORD }} | sudo -S systemctl restart supervisor
